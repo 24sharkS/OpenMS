@@ -175,7 +175,10 @@ AAIndex <- R6Class(classname = "AAIndex",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+AAIndex$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _AASeqWithMass
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1AASeqWithMass.html
@@ -686,6 +689,29 @@ AASequence <- R6Class(classname = "AASequence",cloneable = FALSE,
        result <- AASequence$new(added)
        return(result)
     }
+        #' @export
+        `[.AASequence` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = Residue$new(py_ans)
+        return(r_ans)
+    }
+    # void getAAFrequencies(Map[String, size_t]) nogil except + # wrap-ignore
+AASequence$set("public","getAAFrequencies", function(map) {
+  if( !(is.environment(map) && identical(parent.env(map), asNamespace("collections")) && strsplit(capture.output(map$print())," ")[[1]][1] == "dict"
+      && all(sapply(map$keys(),function(k)  is_scalar_character(k) ))
+      && all(sapply(map$values(),function(v) is_scalar_integer(v) )))
+  ) { stop("arg map wrong type")}
+    k <- map$keys()
+    v <- lapply(map$values(),as.integer)
+    mmap <- py_dict(k,v)
+    private$py_obj$getAAFrequencies(mmap)
+    invisible()
+} )
     
     # C++ signature: AASequence fromString(String s)
     AASequence$fromString = function(s){
@@ -2590,7 +2616,61 @@ Acquisition <- R6Class(classname = "Acquisition",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Acquisition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Acquisition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Acquisition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Acquisition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Acquisition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Acquisition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _AcquisitionInfo
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1AcquisitionInfo.html
@@ -2783,7 +2863,72 @@ AcquisitionInfo <- R6Class(classname = "AcquisitionInfo",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+        #' @export
+        `[.AcquisitionInfo` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = Acquisition$new(py_ans)
+        return(r_ans)
+    }
+    #' @export
+    `<.AcquisitionInfo` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.AcquisitionInfo` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.AcquisitionInfo` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.AcquisitionInfo` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.AcquisitionInfo` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.AcquisitionInfo` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _Adduct
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Adduct.html
@@ -3217,7 +3362,61 @@ AnnotationStatistics <- R6Class(classname = "AnnotationStatistics",cloneable = F
     
     }
 )
-) 
+)
+    #' @export
+    `<.AnnotationStatistics` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.AnnotationStatistics` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.AnnotationStatistics` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.AnnotationStatistics` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.AnnotationStatistics` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.AnnotationStatistics` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _Assay
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Assay.html
@@ -3533,7 +3732,69 @@ Attachment <- R6Class(classname = "Attachment",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.Attachment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Attachment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Attachment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Attachment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Attachment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Attachment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    Attachment$set("active","tableRows", function(tableRows) {
+  if(!missing(tableRows)){
+    if( !(is_list(tableRows) && lapply(tableRows,function(v0) (is_list(v0) || is_vector(v0)) && sapply(v0,function(v0_1) is_scalar_character(v0_1) ))) ) { stop("arg tableRows wrong type") }
+    private$py_obj$tableRows <- modify_depth(tableRows,2,function(t) py_builtin$bytes(t,'utf-8'))
+  } else {
+        modify_depth(private$py_obj$tableRows,2,as.character)
+  }
+} ) 
 
 # R implementation of _AverageLinkage
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1AverageLinkage.html
@@ -3799,7 +4060,56 @@ Base64 <- R6Class(classname = "Base64",cloneable = FALSE,
     
     }
 )
-) 
+)
+    # Cython signature: void encode64(libcpp_vector[double] & in_, ByteOrder to_byte_order, String & out, bool zlib_compression)
+Base64$set("public","encode64",function(in_,to_byte_order,out,zlib_compression) {
+  if (!is_double(in_)) { stop("arg in_ wrong type") }
+  if (!to_byte_order %in% c(0,1)) { stop("arg to_byte_order wrong type") }
+  if (!(is.R6(out) && class(out)[1] == "String")) { stop("arg out wrong type") }
+  if (!(isTRUE(all.equal(zlib_compression,as.integer(zlib_compression))))) { stop("arg zlib_compression wrong type") }
+  private$py_obj$encode64(as.list(in_),as.integer(to_byte_order),out,as.integer(zlib_compression))
+} )
+
+# Cython signature: void decode64(const String & in_, ByteOrder from_byte_order, libcpp_vector[double] & out, bool zlib_compression)
+Base64$set("public","decode64",function(in_,from_byte_order,out,zlib_compression) {
+  if ( !(is_scalar_character(in_) || is.R6(in_) && class(in_)[1] == "String") ) { stop("arg in_ wrong type") }
+  if (!from_byte_order %in% c(0,1)) { stop("arg from_byte_order wrong type") }
+  if (!is_double(out)) { stop("arg out wrong type") }
+  if (!(is_scalar_integer(zlib_compression) || zlib_compression == as.integer(zlib_compression))) { stop("arg zlib_compression wrong type") }
+  out1 <- r_to_py(as.list(out))
+  private$py_obj$decode64(in_,as.integer(to_byte_order),out1,as.integer(zlib_compression))
+
+  tryCatch({
+             eval.parent(substitute(out <- out1))
+             invisible()
+        }, error = function(c) { invisible() }
+  )
+} )
+
+# Cython signature: void encode32(libcpp_vector[float] & in_, ByteOrder to_byte_order, String & out, bool zlib_compression)
+Base64$set("public","encode32",function(in_,to_byte_order,out,zlib_compression) {
+  if (!is_double(in_)) { stop("arg in_ wrong type") }
+  if (!to_byte_order %in% c(0,1)) { stop("arg to_byte_order wrong type") }
+  if (!(is.R6(out) && class(out)[1] == "String")) { stop("arg out wrong type") }
+  if (!(is_scalar_integer(zlib_compression) || zlib_compression == as.integer(zlib_compression))) { stop("arg zlib_compression wrong type") }
+  private$py_obj$encode32(as.list(in_),as.integer(to_byte_order),out,as.integer(zlib_compression))
+} )
+
+# Cython signature: void decode32(const String & in_, ByteOrder from_byte_order, libcpp_vector[float] & out, bool zlib_compression)
+Base64$set("public","decode32",function(in_,from_byte_order,out,zlib_compression) {
+  if ( !(is_scalar_character(in_) || is.R6(in_) && class(in_)[1] == "String") ) { stop("arg in_ wrong type") }
+  if (!from_byte_order %in% c(0,1)) { stop("arg from_byte_order wrong type") }
+  if (!is_double(out)) { stop("arg out wrong type") }
+  if (!(is_scalar_integer(zlib_compression) || zlib_compression == as.integer(zlib_compression))) { stop("arg zlib_compression wrong type") }
+  out1 <- r_to_py(as.list(out))
+  private$py_obj$decode32(in_,as.integer(to_byte_order),out1,as.integer(zlib_compression))
+
+  tryCatch({
+             eval.parent(substitute(out <- out1))
+             invisible()
+        }, error = function(c) { invisible() }
+  )
+} ) 
 
 # R implementation of _BaseFeature
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1BaseFeature.html
@@ -4140,7 +4450,61 @@ BaseFeature <- R6Class(classname = "BaseFeature",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.BaseFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.BaseFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.BaseFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.BaseFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.BaseFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.BaseFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _BernNorm
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1BernNorm.html
@@ -4839,7 +5203,61 @@ BinnedSpectrum <- R6Class(classname = "BinnedSpectrum",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.BinnedSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.BinnedSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.BinnedSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.BinnedSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.BinnedSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.BinnedSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _BoxElement
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1BoxElement.html
@@ -4977,7 +5395,10 @@ BoxElement <- R6Class(classname = "BoxElement",cloneable = FALSE,
         }
 
     )
-) 
+)
+BoxElement$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _CV
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::TargetedExperimentHelper::RetentionTime::RTUnit_1_1CV.html
@@ -5298,7 +5719,61 @@ CVMappingRule <- R6Class(classname = "CVMappingRule",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.CVMappingRule` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.CVMappingRule` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.CVMappingRule` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.CVMappingRule` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.CVMappingRule` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.CVMappingRule` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CVMappingTerm
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CVMappingTerm.html
@@ -5468,7 +5943,61 @@ CVMappingTerm <- R6Class(classname = "CVMappingTerm",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.CVMappingTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.CVMappingTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.CVMappingTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.CVMappingTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.CVMappingTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.CVMappingTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CVMappings
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CVMappings.html
@@ -5680,7 +6209,61 @@ CVReference <- R6Class(classname = "CVReference",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.CVReference` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.CVReference` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.CVReference` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.CVReference` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.CVReference` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.CVReference` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CVTerm
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CVTerm.html
@@ -5850,7 +6433,61 @@ CVTerm <- R6Class(classname = "CVTerm",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.CVTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.CVTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.CVTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.CVTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.CVTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.CVTerm` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CVTermList
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CVTermList.html
@@ -6083,7 +6720,61 @@ CVTermList <- R6Class(classname = "CVTermList",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.CVTermList` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.CVTermList` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.CVTermList` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.CVTermList` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.CVTermList` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.CVTermList` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CVTermListInterface
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CVTermListInterface.html
@@ -6365,7 +7056,61 @@ CVTermListInterface <- R6Class(classname = "CVTermListInterface",cloneable = FAL
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.CVTermListInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.CVTermListInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.CVTermListInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.CVTermListInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.CVTermListInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.CVTermListInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CVTerm_ControlledVocabulary
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CVTerm_ControlledVocabulary.html
@@ -7306,7 +8051,10 @@ ChannelInfo <- R6Class(classname = "ChannelInfo",cloneable = FALSE,
         }
 
     )
-) 
+)
+ChannelInfo$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _ChargePair
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ChargePair.html
@@ -8052,7 +8800,61 @@ ChromatogramPeak <- R6Class(classname = "ChromatogramPeak",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ChromatogramPeak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ChromatogramPeak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ChromatogramPeak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ChromatogramPeak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ChromatogramPeak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ChromatogramPeak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ChromatogramSettings
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ChromatogramSettings.html
@@ -8361,7 +9163,61 @@ ChromatogramSettings <- R6Class(classname = "ChromatogramSettings",cloneable = F
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ChromatogramSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ChromatogramSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ChromatogramSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ChromatogramSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ChromatogramSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ChromatogramSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ChromatogramTools
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ChromatogramTools.html
@@ -8572,7 +9428,61 @@ ClusterProxyKD <- R6Class(classname = "ClusterProxyKD",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ClusterProxyKD` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ClusterProxyKD` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ClusterProxyKD` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ClusterProxyKD` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ClusterProxyKD` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ClusterProxyKD` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ClusteringGrid
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ClusteringGrid.html
@@ -9237,7 +10147,61 @@ ColumnHeader <- R6Class(classname = "ColumnHeader",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ColumnHeader` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ColumnHeader` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ColumnHeader` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ColumnHeader` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ColumnHeader` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ColumnHeader` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CompNovoIdentification
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1CompNovoIdentification.html
@@ -9826,7 +10790,12 @@ ComplementMarker <- R6Class(classname = "ComplementMarker",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    ComplementMarker$set("public","create",function() {
+
+  return(ComplementMarker$new(private$py_obj$create()))
+
+} ) 
 
 # R implementation of _Compomer
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Compomer.html
@@ -10417,7 +11386,61 @@ Compound <- R6Class(classname = "Compound",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Compound` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Compound` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Compound` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Compound` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Compound` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Compound` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ConfidenceScoring
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ConfidenceScoring.html
@@ -10469,7 +11492,7 @@ ConfidenceScoring <- R6Class(classname = "ConfidenceScoring",cloneable = FALSE,
     },
     
     # C++ signature: void initialize(TargetedExperiment & targeted, size_t n_decoys, size_t n_transitions, TransformationDescription trafo)
-    initialize = function(targeted, n_decoys, n_transitions, trafo){
+    initialise = function(targeted, n_decoys, n_transitions, trafo){
     
         if(!(is.R6(targeted) && class(targeted)[1] == "TargetedExperiment")){ stop("arg targeted wrong type") }
         if(!( (is_scalar_integer(n_decoys) || is_scalar_double(n_decoys)) && n_decoys == as.integer(n_decoys))){ stop("arg n_decoys wrong type") }
@@ -10744,7 +11767,64 @@ Configuration <- R6Class(classname = "Configuration",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+Configuration$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    #' @export
+    `<.Configuration` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Configuration` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Configuration` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Configuration` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Configuration` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Configuration` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ConsensusFeature
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ConsensusFeature.html
@@ -11276,7 +12356,61 @@ ConsensusFeature <- R6Class(classname = "ConsensusFeature",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ConsensusFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ConsensusFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ConsensusFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ConsensusFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ConsensusFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ConsensusFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ConsensusIDAlgorithm
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ConsensusIDAlgorithm.html
@@ -11347,7 +12481,10 @@ ConsensusIDAlgorithm <- R6Class(classname = "ConsensusIDAlgorithm",cloneable = F
         invisible()
     }
 )
-) 
+)
+ConsensusIDAlgorithm$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _ConsensusIDAlgorithmAverage
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ConsensusIDAlgorithmAverage.html
@@ -11590,7 +12727,10 @@ ConsensusIDAlgorithmIdentity <- R6Class(classname = "ConsensusIDAlgorithmIdentit
         invisible()
     }
 )
-) 
+)
+ConsensusIDAlgorithmIdentity$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _ConsensusIDAlgorithmPEPIons
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ConsensusIDAlgorithmPEPIons.html
@@ -11919,7 +13059,10 @@ ConsensusIDAlgorithmSimilarity <- R6Class(classname = "ConsensusIDAlgorithmSimil
         invisible()
     }
 )
-) 
+)
+ConsensusIDAlgorithmSimilarity$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _ConsensusIDAlgorithmWorst
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ConsensusIDAlgorithmWorst.html
@@ -12636,7 +13779,99 @@ ConsensusMap <- R6Class(classname = "ConsensusMap",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+        #' @export
+        `[.ConsensusMap` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = ConsensusFeature$new(py_ans)
+        return(r_ans)
+    }
+    #' @export
+    `<.ConsensusMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ConsensusMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ConsensusMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ConsensusMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ConsensusMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ConsensusMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    ConsensusMap$set("public","setUniqueIds",function() {
+  private$py_obj$setUniqueIds()
+} )
+
+ConsensusMap$set("public","getColumnHeaders",function() {
+  d <- private$py_obj$getColumnHeaders()
+  key <- py_to_r(py_builtin$list(d$keys()))
+  val <- py_to_r(py_builtin$list(d$values()))
+  return (collections::dict(lapply(val,function(v) ColumnHeader$new(v)),key))
+} )
+
+ConsensusMap$set("public","setColumnHeaders",function(in_0) {
+    if( !(is.environment(in_0) && identical(parent.env(in_0), asNamespace("collections")) && strsplit(capture.output(in_0$print())," ")[[1]][1] == "dict"
+      && all(sapply(map$keys(),function(k) is_scalar_integer(k) || k == as.integer(k)))
+      && all(sapply(map$values(),function(v) is.R6(v) && class(v)[1]=="ColumnHeader" )))
+  ) { stop("arg map wrong type")}
+  d <- py_dict(lapply(in_0$keys(),as.integer),in_0$values())
+  private$py_obj$setColumnHeaders(d)
+  k <- py_to_r(py_builtin$list(d$keys()))
+  v <- lapply(py_to_r(py_builtin$list(d$values())),function(c) ColumnHeader$new(c))
+  tryCatch({
+             eval.parent(substitute(in_0 <- collections::dict(v,k)))
+             invisible()
+        }, error = function(c) { invisible() }
+  )
+
+} ) 
 
 # R implementation of _ConsensusMapNormalizerAlgorithmMedian
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::ConsensusMapNormalizerAlgorithmMedian_1_1ConsensusMapNormalizerAlgorithmMedian.html
@@ -13135,7 +14370,61 @@ Contact <- R6Class(classname = "Contact",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Contact` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Contact` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Contact` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Contact` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Contact` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Contact` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ContactPerson
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ContactPerson.html
@@ -13386,7 +14675,61 @@ ContactPerson <- R6Class(classname = "ContactPerson",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ContactPerson` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ContactPerson` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ContactPerson` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ContactPerson` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ContactPerson` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ContactPerson` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ContinuousWaveletTransform
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ContinuousWaveletTransform.html
@@ -13979,7 +15322,61 @@ ConvexHull2D <- R6Class(classname = "ConvexHull2D",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ConvexHull2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ConvexHull2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ConvexHull2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ConvexHull2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ConvexHull2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ConvexHull2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _CrossLinkSpectrumMatch
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::OPXLDataStructs_1_1CrossLinkSpectrumMatch.html
@@ -14916,7 +16313,13 @@ CrossLinksDB <- R6Class(classname = "CrossLinksDB",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+CrossLinksDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    CrossLinksDB$set("public","initialize",function(){
+  private$py_obj <- Pymod$CrossLinksDB()
+},overwrite = TRUE ) 
 
 # R implementation of _CsiAdapterHit
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::CsiFingerIdMzTabWriter_1_1CsiAdapterHit.html
@@ -15211,6 +16614,9 @@ CsiFingerIdMzTabWriter <- R6Class(classname = "CsiFingerIdMzTabWriter",cloneable
     private = list(py_obj = NA)
 
 )
+CsiFingerIdMzTabWriter$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
     
     # C++ signature: void read(libcpp_vector[String] sirius_output_paths, String original_input_mzml, size_t top_n_hits, MzTab & result)
     CsiFingerIdMzTabWriter$read = function(sirius_output_paths, original_input_mzml, top_n_hits, result){
@@ -15495,7 +16901,22 @@ DIAScoring <- R6Class(classname = "DIAScoring",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    DIAScoring$set("public","dia_by_ion_score",function(spectrum,sequence,charge,bseries_score,yseries_score){
+  if(!(is.R6(spectrum) && class(spectrum)[1]=="OSSpectrum")) { stop("arg spectrum wrong type") }
+  if(!(is.R6(spectrum) && class(spectrum)[1]=="AASequence")) { stop("arg sequence wrong type") }
+  if(!(is_scalar_integer(charge) || (length(charge)==1 && charge == as.integer(charge))) ) { stop("arg charge wrong type") }
+  if(!is_scalar_double(bseries_score)) { stop("arg bseries_score wrong type") }
+  if(!is_scalar_double(yseries_score)) { stop("arg yseries_score wrong type") }
+  input_bseries_score <- r_to_py(bseries_score)
+  input_yseries_score <- r_to_py(yseries_score)
+  ans <- private$py_obj$dia_by_ion_score(spectrum,sequence,as.integer(charge),input_bseries_score,input_yseries_score)
+  tryCatch({
+        eval.parent(substitute(bseries_score <- py_to_r(input_bseries_score)))
+        eval.parent(substitute(yseries_score <- py_to_r(input_yseries_score)))
+        return(ans)
+           }, error = function(e) {return(ans)})
+} ) 
 
 # R implementation of _DRange1
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DRange1.html
@@ -15600,7 +17021,61 @@ DRange1 <- R6Class(classname = "DRange1",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.DRange1` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DRange1` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DRange1` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DRange1` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DRange1` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DRange1` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DRange2
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DRange2.html
@@ -15715,7 +17190,61 @@ DRange2 <- R6Class(classname = "DRange2",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.DRange2` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DRange2` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DRange2` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DRange2` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DRange2` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DRange2` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DTA2DFile
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DTA2DFile.html
@@ -16064,7 +17593,61 @@ DataFilter <- R6Class(classname = "DataFilter",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.DataFilter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DataFilter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DataFilter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DataFilter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DataFilter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DataFilter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DataFilters
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DataFilters.html
@@ -16197,7 +17780,19 @@ DataFilters <- R6Class(classname = "DataFilters",cloneable = FALSE,
     
     }
 )
-) 
+)
+        #' @export
+        `[.DataFilters` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx < 0) { stop(paste("invalid index ",idx)) }
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = DataFilter$new(py_ans)
+        return(r_ans)
+    } 
 
 # R implementation of _DataProcessing
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DataProcessing.html
@@ -16375,7 +17970,61 @@ DataProcessing <- R6Class(classname = "DataProcessing",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.DataProcessing` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DataProcessing` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DataProcessing` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DataProcessing` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DataProcessing` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DataProcessing` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DataValue
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DataValue.html
@@ -16511,24 +18160,6 @@ DataValue <- R6Class(classname = "DataValue",cloneable = FALSE,
     
     },
     
-    toInt = function(){
-        py_ans = private$py_obj$toInt()
-            r_ans = py_ans
-        return(r_ans)
-    },
-    
-    toString = function(){
-        py_ans = private$py_obj$toString()
-        r_ans = py_ans
-        return(r_ans)
-    },
-    
-    toDouble = function(){
-        py_ans = private$py_obj$toDouble()
-            r_ans = py_ans
-        return(r_ans)
-    },
-    
     # C++ signature: StringList toStringList()
     toStringList = function(){
     
@@ -16627,7 +18258,23 @@ DataValue <- R6Class(classname = "DataValue",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    DataValue$set("public","toInt",
+      function(){
+          py_ans = private$py_obj$toInt()
+                  r_ans = py_ans
+          return(r_ans)
+      }
+    )
+    
+    DataValue$set("public","toDouble",
+      function(){
+          py_ans = private$py_obj$toDouble()
+                  r_ans = py_ans
+          return(r_ans)
+      }
+    )
+     
 
 # R implementation of _Date
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Date.html
@@ -16938,7 +18585,10 @@ DecoyGenerator <- R6Class(classname = "DecoyGenerator",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+DecoyGenerator$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _Deisotoper
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Deisotoper.html
@@ -17345,7 +18995,61 @@ DigestionEnzyme <- R6Class(classname = "DigestionEnzyme",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.DigestionEnzyme` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DigestionEnzyme` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DigestionEnzyme` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DigestionEnzyme` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DigestionEnzyme` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DigestionEnzyme` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DigestionEnzymeProtein
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DigestionEnzymeProtein.html
@@ -17615,7 +19319,61 @@ DigestionEnzymeProtein <- R6Class(classname = "DigestionEnzymeProtein",cloneable
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.DigestionEnzymeProtein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DigestionEnzymeProtein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DigestionEnzymeProtein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DigestionEnzymeProtein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DigestionEnzymeProtein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DigestionEnzymeProtein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DigestionEnzymeRNA
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DigestionEnzymeRNA.html
@@ -17749,7 +19507,64 @@ DigestionEnzymeRNA <- R6Class(classname = "DigestionEnzymeRNA",cloneable = FALSE
         return(r_ans)
     }
 )
-) 
+)
+DigestionEnzymeRNA$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    #' @export
+    `<.DigestionEnzymeRNA` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DigestionEnzymeRNA` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DigestionEnzymeRNA` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DigestionEnzymeRNA` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DigestionEnzymeRNA` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DigestionEnzymeRNA` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DigestionFilter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DigestionFilter.html
@@ -18000,7 +19815,61 @@ DistanceMatrix <- R6Class(classname = "DistanceMatrix",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.DistanceMatrix` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.DistanceMatrix` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.DistanceMatrix` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.DistanceMatrix` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.DistanceMatrix` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.DistanceMatrix` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _DocumentIdentifier
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1DocumentIdentifier.html
@@ -18411,6 +20280,13 @@ ElementDB <- R6Class(classname = "ElementDB",cloneable = FALSE,
     
     }
 )
+)
+ElementDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    ElementDB$set("public","initialize",function(){
+  private$py_obj <- Pymod$ElementDB()
+}, overwrite = TRUE
 ) 
 
 # R implementation of _ElutionModelFitter
@@ -19431,6 +21307,60 @@ EmpiricalFormula <- R6Class(classname = "EmpiricalFormula",cloneable = FALSE,
        added <- e1$.__enclos_env__$private$py_obj + e2$.__enclos_env__$private$py_obj
        result <- EmpiricalFormula$new(added)
        return(result)
+    }
+    #' @export
+    `<.EmpiricalFormula` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.EmpiricalFormula` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.EmpiricalFormula` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.EmpiricalFormula` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.EmpiricalFormula` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.EmpiricalFormula` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
     } 
 
 # R implementation of _EnzymaticDigestion
@@ -19839,6 +21769,9 @@ ExperimentalDesignFile <- R6Class(classname = "ExperimentalDesignFile",cloneable
     private = list(py_obj = NA)
 
 )
+ExperimentalDesignFile$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
     
     # C++ signature: ExperimentalDesign load(const String & tsv_file, bool)
     ExperimentalDesignFile$load = function(tsv_file, in_1){
@@ -20384,7 +22317,61 @@ ExperimentalSettings <- R6Class(classname = "ExperimentalSettings",cloneable = F
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ExperimentalSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ExperimentalSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ExperimentalSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ExperimentalSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ExperimentalSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ExperimentalSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ExtractionCoordinates
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ExtractionCoordinates.html
@@ -21566,7 +23553,61 @@ Feature <- R6Class(classname = "Feature",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Feature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Feature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Feature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Feature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Feature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Feature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _FeatureDeconvolution
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1FeatureDeconvolution.html
@@ -22637,7 +24678,10 @@ FeatureGroupingAlgorithm <- R6Class(classname = "FeatureGroupingAlgorithm",clone
         invisible()
     }
 )
-) 
+)
+FeatureGroupingAlgorithm$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _FeatureGroupingAlgorithmKD
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1FeatureGroupingAlgorithmKD.html
@@ -23462,7 +25506,61 @@ FeatureHandle <- R6Class(classname = "FeatureHandle",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.FeatureHandle` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.FeatureHandle` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.FeatureHandle` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.FeatureHandle` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.FeatureHandle` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.FeatureHandle` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _FeatureMap
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1FeatureMap.html
@@ -24031,12 +26129,81 @@ FeatureMap <- R6Class(classname = "FeatureMap",cloneable = FALSE,
     }
 )
 )
+        #' @export
+        `[.FeatureMap` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = Feature$new(py_ans)
+        return(r_ans)
+    }
     #' @export
     `+.FeatureMap` <- function(e1, e2){
        added <- e1$.__enclos_env__$private$py_obj + e2$.__enclos_env__$private$py_obj
        result <- FeatureMap$new(added)
        return(result)
-    } 
+    }
+    #' @export
+    `<.FeatureMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.FeatureMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.FeatureMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.FeatureMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.FeatureMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.FeatureMap` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    FeatureMap$set("public","setUniqueIds",function(){
+  private$py_obj <- Pymod$setUniqueIds()
+}
+) 
 
 # R implementation of _FeatureMapping
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1FeatureMapping.html
@@ -24240,6 +26407,9 @@ File <- R6Class(classname = "File",cloneable = FALSE,
     private = list(py_obj = NA)
 
 )
+File$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
     
     # C++ signature: String absolutePath(String file)
     File$absolutePath = function(file){
@@ -25305,7 +27475,105 @@ FloatDataArray <- R6Class(classname = "FloatDataArray",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.FloatDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.FloatDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.FloatDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.FloatDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.FloatDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.FloatDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    # Gets the raw data for the float data array
+# Example usage:
+# fd = FloatDataArray$new()
+# data = fd$get_data()
+FloatDataArray$set("public","get_data",function(){
+  ans <- private$py_obj$get_data()
+  return(as.vector(ans))
+}
+)
+
+
+# Sets the raw data for the float data array
+#
+# Example usage:
+#
+# fd = FloatDataArray$new()
+# data = as.double(1:3)
+# fd.set_data(data)
+FloatDataArray$set("public","set_data",function(data){
+  if (!( is_vector(data) && is_double(data) && (is.null(ncol(data)) || is.na(ncol(data))) )) { stop(paste0("Wrong argument ",data)) }
+  private$py_obj$set_data(as.array(data))
+}
+)
+
+#' @export
+`[.FloatDataArray` <- function(x,ix){
+  stopifnot(R6::is.R6(x))
+  if(!(isTRUE(all.equal(ix,as.integer(ix))))) { stop("index must be integer") }
+  tryCatch({
+    return(x$.__enclos_env__$privat$py_obj[as.integer(ix)-1])
+           }, error = function(e) { paste0("invalid index",ix) }
+  )
+}
+
+#' @export
+`[<-.FloatDataArray` <- function(x,ix,value){
+  stopifnot(R6::is.R6(x))
+  if(!(isTRUE(all.equal(ix,as.integer(ix))))) { stop("index must be integer") }
+  if(!(is_scalar_double(value) || is_scalar_integer(value))) { stop("value must be numeric") }
+    tryCatch({
+    x$.__enclos_env__$privat$py_obj[as.integer(ix)-1] <- value
+           }, error = function(e) { paste0("invalid index",ix) }
+  )
+} 
 
 # R implementation of _GaussFilter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1GaussFilter.html
@@ -28331,7 +30599,28 @@ IDRipper <- R6Class(classname = "IDRipper",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    # Input types:
+# ripped   :  dict object ( see Collections::dict() ) of key : R6 object of <String> & value : list(list(<ProteinIdentification>),list(<PeptideIdentification>))
+# proteins :  list(<ProteinIdentification>)
+# peptides :  list(<PeptideIdentification>)
+IDRipper$set("public","rip",function(ripped,proteins,peptides) {
+    if( !(is.environment(ripped) && identical(parent.env(ripped), asNamespace("collections")) && strsplit(capture.output(ripped$print())," ")[[1]][1] == "dict"
+      && all(sapply(ripped$keys(),function(k) is.R6(k) && class(k)[1] == "String" ))
+      && all(sapply(ripped$values(),function(v) len(v) == 2 && all(sapply(v[[1]],function(p) is.R6(p) && class(p)[1]=="ProteinIdentification")) && all(sapply(v[[2]],function(p) is.R6(p) && class(p)[1]=="PeptideIdentification")) )))
+  ) { stop("arg ripped wrong type")}
+  if(!(is_list(proteins) && all(sapply(proteins,function(p) is.R6(p) && class(p)[1] == "ProteinIdentification"))) ) { stop("wrong arg proteins") }
+  if(!(is_list(peptides) && all(sapply(peptides,function(p) is.R6(p) && class(p)[1] == "PeptideIdentification"))) ) { stop("wrong arg peptides") }
+  d <- py_dict(ripped$keys(),ripped$values())
+  private$py_obj$rip(d,proteins,peptides)
+  k <- lapply(py_to_r(py_builtin$list(d$keys())),function(k) String$new(k))
+  v <- modify_depth( py_to_r(py_builtin$list(d$values())), 3, function(v) eval(parse(text = paste(class_to_wrap(v),"$","new(v)"))) )
+  out_ripped <- collections::dict(v,k)
+  tryCatch({
+      eval.parent(substitute(ripped <- out_ripped))
+      invisible()
+           }, error = function(e){ invisible() })
+} ) 
 
 # R implementation of _ILPDCWrapper
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ILPDCWrapper.html
@@ -28825,7 +31114,61 @@ IMSElement <- R6Class(classname = "IMSElement",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.IMSElement` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IMSElement` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IMSElement` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IMSElement` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IMSElement` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IMSElement` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IMSIsotopeDistribution
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::ims::IMSIsotopeDistribution_1_1IMSIsotopeDistribution.html
@@ -29037,7 +31380,61 @@ IMSIsotopeDistribution <- R6Class(classname = "IMSIsotopeDistribution",cloneable
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.IMSIsotopeDistribution` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IMSIsotopeDistribution` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IMSIsotopeDistribution` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IMSIsotopeDistribution` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IMSIsotopeDistribution` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IMSIsotopeDistribution` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IMSIsotopeDistribution_Peak
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::ims::IMSIsotopeDistribution_1_1IMSIsotopeDistribution_Peak.html
@@ -29098,7 +31495,61 @@ IMSIsotopeDistribution_Peak <- R6Class(classname = "IMSIsotopeDistribution_Peak"
     
     }
 )
-) 
+)
+    #' @export
+    `<.IMSIsotopeDistribution_Peak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IMSIsotopeDistribution_Peak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IMSIsotopeDistribution_Peak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IMSIsotopeDistribution_Peak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IMSIsotopeDistribution_Peak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IMSIsotopeDistribution_Peak` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IMSWeights
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::ims::Weights_1_1IMSWeights.html
@@ -29577,7 +32028,61 @@ Identification <- R6Class(classname = "Identification",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Identification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Identification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Identification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Identification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Identification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Identification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IdentificationData
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IdentificationData.html
@@ -29700,7 +32205,61 @@ IdentificationData <- R6Class(classname = "IdentificationData",cloneable = FALSE
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.IdentificationData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IdentificationData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IdentificationData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IdentificationData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IdentificationData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IdentificationData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IdentificationDataConverter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IdentificationDataConverter.html
@@ -30017,7 +32576,61 @@ IdentificationHit <- R6Class(classname = "IdentificationHit",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.IdentificationHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IdentificationHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IdentificationHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IdentificationHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IdentificationHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IdentificationHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IncludeExcludeTarget
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IncludeExcludeTarget.html
@@ -30415,7 +33028,61 @@ IncludeExcludeTarget <- R6Class(classname = "IncludeExcludeTarget",cloneable = F
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.IncludeExcludeTarget` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IncludeExcludeTarget` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IncludeExcludeTarget` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IncludeExcludeTarget` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IncludeExcludeTarget` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IncludeExcludeTarget` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _InclusionExclusionList
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1InclusionExclusionList.html
@@ -30922,7 +33589,7 @@ IndexedMzMLHandler <- R6Class(classname = "IndexedMzMLHandler",cloneable = FALSE
         if(!( (is_scalar_integer(id_) || is_scalar_double(id_)) && id_ == as.integer(id_))){ stop("arg id_ wrong type") }
     
         py_ans = private$py_obj$getSpectrumById(as.integer(id_))
-        r_ans = _Interfaces_Spectrum$new(py_ans)
+        r_ans = Spectrum$new(py_ans)
         return(r_ans)
     },
     
@@ -30932,7 +33599,7 @@ IndexedMzMLHandler <- R6Class(classname = "IndexedMzMLHandler",cloneable = FALSE
         if(!( (is_scalar_integer(id_) || is_scalar_double(id_)) && id_ == as.integer(id_))){ stop("arg id_ wrong type") }
     
         py_ans = private$py_obj$getChromatogramById(as.integer(id_))
-        r_ans = _Interfaces_Chromatogram$new(py_ans)
+        r_ans = Chromatogram$new(py_ans)
         return(r_ans)
     },
     
@@ -31247,7 +33914,67 @@ InspectInfile <- R6Class(classname = "InspectInfile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.InspectInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.InspectInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.InspectInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.InspectInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.InspectInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.InspectInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    InspectInfile$set("public","getModifications",function(){
+  d <- py_call(private$py_obj$getModifications)
+  k <- lapply( py_to_r(py_builtin$list(d$keys())), as.character )
+  v <- modify_depth( py_to_r(py_builtin$list(d$values())), 2, as.character )
+  return(collections::dict(v,k))
+}) 
 
 # R implementation of _InspectOutfile
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1InspectOutfile.html
@@ -31495,7 +34222,61 @@ InspectOutfile <- R6Class(classname = "InspectOutfile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.InspectOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.InspectOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.InspectOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.InspectOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.InspectOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.InspectOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _Instrument
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Instrument.html
@@ -31774,7 +34555,61 @@ Instrument <- R6Class(classname = "Instrument",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _InstrumentSettings
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1InstrumentSettings.html
@@ -31991,7 +34826,61 @@ InstrumentSettings <- R6Class(classname = "InstrumentSettings",cloneable = FALSE
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.InstrumentSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.InstrumentSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.InstrumentSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.InstrumentSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.InstrumentSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.InstrumentSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IntegerDataArray
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::DataArrays_1_1IntegerDataArray.html
@@ -32194,7 +35083,106 @@ IntegerDataArray <- R6Class(classname = "IntegerDataArray",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.IntegerDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IntegerDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IntegerDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IntegerDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IntegerDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IntegerDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    # Gets the raw data for the float data array
+# Example usage:
+# fd = IntegerDataArray$new()
+# data = fd$get_data()
+IntegerDataArray$set("public","get_data",function(){
+  ans <- private$py_obj$get_data()
+  return(as.vector(ans))
+}
+)
+
+
+# Sets the raw data for the float data array
+#
+# Example usage:
+#
+# fd = IntegerDataArray$new()
+# data = 1:5
+# fd.set_data(data)
+IntegerDataArray$set("public","set_data",function(data){
+  if (!( is_vector(data) && all(sapply(data, function(d) isTRUE(all.equal(d,as.integer(d))))) && (is.null(ncol(data)) || is.na(ncol(data))) )) { stop(paste0("Wrong argument ",data)) }
+  data1 <- sapply(data,as.integer)
+  private$py_obj$set_data(as.array(data1))
+}
+)
+
+#' @export
+`[.IntegerDataArray` <- function(x,ix){
+  stopifnot(R6::is.R6(x))
+  if(!(isTRUE(all.equal(ix,as.integer(ix))))) { stop("index must be integer") }
+  tryCatch({
+    return(x$.__enclos_env__$privat$py_obj[as.integer(ix)-1])
+           }, error = function(e) { paste0("invalid index",ix) }
+  )
+}
+
+#' @export
+`[<-.IntegerDataArray` <- function(x,ix,value){
+  stopifnot(R6::is.R6(x))
+  if(!(isTRUE(all.equal(ix,as.integer(ix))))) { stop("index must be integer") }
+  if(!(isTRUE(all.equal(ix,as.integer(ix))))) { stop("value must be integer") }
+    tryCatch({
+    x$.__enclos_env__$privat$py_obj[as.integer(ix)-1] <- as.integer(value)
+           }, error = function(e) { paste0("invalid index",ix) }
+  )
+} 
 
 # R implementation of _IntensityBalanceFilter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IntensityBalanceFilter.html
@@ -32987,7 +35975,61 @@ IonDetector <- R6Class(classname = "IonDetector",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.IonDetector` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IonDetector` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IonDetector` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IonDetector` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IonDetector` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IonDetector` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IonSource
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IonSource.html
@@ -33178,7 +36220,61 @@ IonSource <- R6Class(classname = "IonSource",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.IonSource` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IonSource` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IonSource` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IonSource` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IonSource` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IonSource` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IonType
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IonType.html
@@ -33293,7 +36389,61 @@ IonType <- R6Class(classname = "IonType",cloneable = FALSE,
     
     }
 )
-) 
+)
+    #' @export
+    `<.IonType` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.IonType` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.IonType` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.IonType` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.IonType` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.IonType` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _IsobaricChannelExtractor
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IsobaricChannelExtractor.html
@@ -34699,7 +37849,10 @@ IsotopeMarker <- R6Class(classname = "IsotopeMarker",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    IsotopeMarker$set("public","create",function(){
+  return(IsotopeMarker$new(private$py_obj$IsotopeMarker()))
+} ) 
 
 # R implementation of _IsotopeModel
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IsotopeModel.html
@@ -35114,7 +38267,10 @@ IsotopeWavelet <- R6Class(classname = "IsotopeWavelet",cloneable = FALSE,
     
     }
 )
-) 
+)
+IsotopeWavelet$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _IsotopeWaveletTransform[_Peak1D]
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1IsotopeWaveletTransform[_Peak1D].html
@@ -36032,7 +39188,18 @@ KDTreeFeatureNode <- R6Class(classname = "KDTreeFeatureNode",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+        #' @export
+        `[.KDTreeFeatureNode` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(i) || is_scalar_double(i)) && i == as.integer(i))){ stop("arg i wrong type") }
+    
+        idx = as.integer(i)
+        if (idx < 0) { stop(paste("invalid index ",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(i)]
+            r_ans = py_ans
+        return(r_ans)
+    } 
 
 # R implementation of _Kernel_MassTrace
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Kernel_MassTrace.html
@@ -38833,7 +42000,10 @@ LinearResamplerAlign <- R6Class(classname = "LinearResamplerAlign",cloneable = F
         invisible()
     }
 )
-) 
+)
+LinearResamplerAlign$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _LocalLinearMap
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1LocalLinearMap.html
@@ -40713,7 +43883,61 @@ MRMFeature <- R6Class(classname = "MRMFeature",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.MRMFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MRMFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MRMFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MRMFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MRMFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MRMFeature` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _MRMFeatureFilter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MRMFeatureFilter.html
@@ -41574,6 +44798,9 @@ MRMRTNormalizer <- R6Class(classname = "MRMRTNormalizer",cloneable = FALSE,
     private = list(py_obj = NA)
 
 )
+MRMRTNormalizer$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
     
     # C++ signature: bool chauvenet(libcpp_vector[double] residuals, int pos)
     MRMRTNormalizer$chauvenet = function(residuals, pos){
@@ -41822,7 +45049,10 @@ MRMScoring <- R6Class(classname = "MRMScoring",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+MRMScoring$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _MRMTransitionGroup[_MSChromatogram,_ReactionMonitoringTransition]
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MRMTransitionGroup[_MSChromatogram,_ReactionMonitoringTransition].html
@@ -42882,6 +46112,88 @@ MSChromatogram <- R6Class(classname = "MSChromatogram",cloneable = FALSE,
         invisible()
     }
 )
+)
+        #' @export
+        `[.MSChromatogram` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = ChromatogramPeak$new(py_ans)
+        return(r_ans)
+    }
+    #' @export
+    `<.MSChromatogram` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MSChromatogram` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MSChromatogram` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MSChromatogram` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MSChromatogram` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MSChromatogram` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    MSChromatogram$set("public","get_peaks", function() {
+  res <- private$py_obj$get_peaks()
+  res[[1]] <- as.vector(res[[1]])
+  res[[2]] <- as.vector(res[[2]])
+  return(res)
+} )
+
+
+MSChromatogram$set("public","set_peaks", function(peaks) {
+  if(!(is_list(peaks) && length(peaks) == 2)) { stop("Input for set_peaks needs to be a list of size 2 (mz and intensity vector))") }
+  if( !(is_vector(peaks[[1]]) && is_vector(peaks[[2]]) && length(peaks[[1]]) == length(peaks[[2]])) ) { stop("Length of mz and intensity vector must be equal!!") }
+  if( !(dim(peaks[[1]]) == NULL || length(dim(peaks[[1]]))==1) ) { stop("Input mz array must be one dimensional") }
+  if( !(dim(peaks[[2]]) == NULL || length(dim(peaks[[2]]))==1) ) { stop("Input intensity array must be one dimensional") }
+  if( !((is_integer(peaks[[1]]) || is_double(peaks[[1]])) && (is_integer(peaks[[2]]) || is_double(peaks[[2]]))) ) { stop("mz and intensity vector can only be of integer/double type")}
+  private$py_obj$set_peaks(list(as.array(peaks[[1]]),as.array(peaks[[2]])))
+  invisible()
+}
 ) 
 
 # R implementation of _MSDGroup
@@ -43050,7 +46362,10 @@ MSDataAggregatingConsumer <- R6Class(classname = "MSDataAggregatingConsumer",clo
         invisible()
     }
 )
-) 
+)
+MSDataAggregatingConsumer$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _MSDataCachedConsumer
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MSDataCachedConsumer.html
@@ -44056,7 +47371,92 @@ MSExperiment <- R6Class(classname = "MSExperiment",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+        #' @export
+        `[.MSExperiment` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = MSSpectrum$new(py_ans)
+        return(r_ans)
+    }
+    #' @export
+    `<.MSExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MSExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MSExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MSExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MSExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MSExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    MSExperiment$set("public","getMSLevels", function() {
+  res <- private$py_obj$getMSLevels()
+  return(res)
+} )
+
+MSExperiment$set("public","getChromatogram", function(id_) {
+  if(!(isTRUE(all.equal(id_,as.integer(id_))))) { stop("arg id_ wrong type") }
+  num <- self$getgetNrChromatograms()
+  if( id_ < num) { stop(paste0("Requested chromatogram ",id_," does not exist","only ",num," chromatograms are there")) }
+  res <- private$py_obj$getMSLevels(as.integer(id_))
+  return(MSChromatogram$new(res))
+} )
+
+MSExperiment$set("public","getSpectrum", function(id_) {
+  if(!(isTRUE(all.equal(id_,as.integer(id_))))) { stop("arg id_ wrong type") }
+  num <- self$getNrSpectra()
+  if( id_ < num) { stop(paste0("Requested chromatogram ",id_," does not exist","only ",num," chromatograms are there")) }
+  res <- private$py_obj$getMSLevels(as.integer(id_))
+  return(MSSpectrum$new(res))
+} ) 
 
 # R implementation of _MSNumpressCoder
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MSNumpressCoder.html
@@ -44824,7 +48224,67 @@ MSQuantifications <- R6Class(classname = "MSQuantifications",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.MSQuantifications` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MSQuantifications` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MSQuantifications` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MSQuantifications` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MSQuantifications` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MSQuantifications` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    MSQuantifications$set("public","registerExperiment", function(exp,labels) {
+  if(!(is.R6(exp) && class(exp)[1]=="MSExperiment")) { stop("arg exp wrong type") }
+  if (!(is_list(labels) && all(sapply(labels), function(l2) is_list(l2) && all(sapply(l2, function(l3) is_list(l3) && all(sapply(l3, function(l4) is_list(l4) && length(l4)==2 && all(class(l4[[1]])==c("String","R6")) && is_scalar_double(l4[[2]]))))))) ) { stop("arg labels wrong type") }
+  private$py_obj$registerExperiment(exp,labels)
+  invisible()
+} ) 
 
 # R implementation of _MSSim
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MSSim.html
@@ -45639,6 +49099,100 @@ MSSpectrum <- R6Class(classname = "MSSpectrum",cloneable = FALSE,
         invisible()
     }
 )
+)
+        #' @export
+        `[.MSSpectrum` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(in_0) || is_scalar_double(in_0)) && in_0 == as.integer(in_0))){ stop("arg in_0 wrong type") }
+    
+        idx = as.integer(in_0)
+        if (idx >=  x$.__enclos_env__$private$py_obj$inst$get()$size()) { stop(paste("invalid index",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(in_0)]
+        r_ans = Peak1D$new(py_ans)
+        return(r_ans)
+    }
+    #' @export
+    `<.MSSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MSSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MSSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MSSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MSSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MSSpectrum` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    # Cython signature: numpy_vector, numpy_vector get_peaks()
+# Will return a list of two vectors (m/z, intensity) corresponding
+# to the peaks in the MSSpectrum. Provides fast access to peaks.
+MSSpectrum$set("public","get_peaks", function() {
+  res <- private$py_obj$get_peaks()
+  res[[1]] <- as.vector(res[[1]])
+  res[[2]] <- as.vector(res[[2]])
+  return(res)
+} )
+
+# Cython signature: set_peaks((numpy_vector, numpy_vector))
+# Takes a list of two vectors/arrays(1d) (m/z, intensity) and populates the MSSpectrum.
+MSSpectrum$set("public","set_peaks", function(peaks) {
+  if(!(is_list(peaks) && length(peaks) == 2)) { stop("Input for set_peaks needs to be a list of size 2 (mz and intensity vector))") }
+  if( !(is_vector(peaks[[1]]) && is_vector(peaks[[2]]) && length(peaks[[1]]) == length(peaks[[2]])) ) { stop("Length of mz and intensity vector must be equal!!") }
+  if( !(dim(peaks[[1]]) == NULL || length(dim(peaks[[1]]))==1) ) { stop("Input mz array must be one dimensional") }
+  if( !(dim(peaks[[2]]) == NULL || length(dim(peaks[[2]]))==1) ) { stop("Input intensity array must be one dimensional") }
+  if( !((is_integer(peaks[[1]]) || is_double(peaks[[1]])) && (is_integer(peaks[[2]]) || is_double(peaks[[2]]))) ) { stop("mz and intensity vector can only be of integer/double type")}
+  private$py_obj$set_peaks(list(as.array(peaks[[1]]),as.array(peaks[[2]])))
+  invisible()
+}
+)
+
+MSSpectrum$set("public","intensityInRange", function(mzmin,mzmax) {
+  if (!is_scalar_double(mzmin)) { stop("arg mzmin should be a scalar double value") }
+  if (!is_scalar_double(mzmax)) { stop("arg mzmax should be a scalar double value") }
+  return(private$py_obj$intensityInRange(mzmin,mzmax))
+}
 ) 
 
 # R implementation of _MSstatsFile
@@ -46876,7 +50430,10 @@ MapConversion <- R6Class(classname = "MapConversion",cloneable = FALSE,
     
     }
 )
-) 
+)
+MapConversion$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _MarkerMower
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MarkerMower.html
@@ -48005,7 +51562,61 @@ MassAnalyzer <- R6Class(classname = "MassAnalyzer",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.MassAnalyzer` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MassAnalyzer` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MassAnalyzer` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MassAnalyzer` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MassAnalyzer` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MassAnalyzer` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _MassDecomposition
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MassDecomposition.html
@@ -48381,7 +51992,10 @@ MassTrace <- R6Class(classname = "MassTrace",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+MassTrace$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _MassTraceDetection
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MassTraceDetection.html
@@ -48973,7 +52587,22 @@ MatrixDouble <- R6Class(classname = "MatrixDouble",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    # Returns a matrix corresponding to 2d numpy array
+MatrixDouble$set("public","get_matrix",function(){
+  private$py_obj$get_matrix()
+} )
+
+# Returns a matrix corresponding to 2d numpy array
+MatrixDouble$set("public","get_matrix_as_view",function(){
+  private$py_obj$get_matrix_as_view()
+} )
+
+MatrixDouble$set("public","set_matrix",function(data){
+  if(!(is.matrix(data) && all(sapply(seq_along(NROW(data)), function(d) is_double(data[d,]) ))) ) { stop("arg data wrong type") }
+  private$py_obj$set_matrix(data)
+  invisible()
+} ) 
 
 # R implementation of _MetaInfo
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MetaInfo.html
@@ -49490,7 +53119,61 @@ MetaInfoDescription <- R6Class(classname = "MetaInfoDescription",cloneable = FAL
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.MetaInfoDescription` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MetaInfoDescription` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MetaInfoDescription` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MetaInfoDescription` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MetaInfoDescription` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MetaInfoDescription` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _MetaInfoInterface
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MetaInfoInterface.html
@@ -49652,7 +53335,97 @@ MetaInfoInterface <- R6Class(classname = "MetaInfoInterface",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.MetaInfoInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.MetaInfoInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.MetaInfoInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.MetaInfoInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.MetaInfoInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.MetaInfoInterface` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    MetaInfoInterface$set("public","getMetaValues",function(){
+  d <- py_call(private$py_obj$getMetaValues)
+  k <- lapply(py_to_r(py_builtin$list(d$keys())),as.character)
+  v <- py_to_r(py_builtin$list(d$values()))
+  # v : list(bytes)/list(int)/list(double)/list(list(int))/list(list(double))/list(list(bytes))
+  is_nested <- all(sapply(v,function(v1) is_list(v1)))
+  if(is_nested){
+    v <- modify_depth(v,2,function(s){
+       if(class(s)[1]=="python.builtin.bytes") as.character(s)
+       else { s }
+    })
+  } else {
+    v <- modify_depth(v,1, function(s){
+       if(class(s)[1]=="python.builtin.bytes") as.character(s)
+       else { s }
+    })
+  }
+  return(collections::dict(v,k))
+}
+)
+
+MetaInfoInterface$set("public","setMetaValues",function(mmap){
+    if( !(is.environment(mmap) && identical(parent.env(mmap), asNamespace("collections")) && strsplit(capture.output(mmap$print())," ")[[1]][1] == "dict"
+      && all(sapply(mmap$keys(),function(k) is_scalar_character(k)))
+      && all(sapply(mmap$values(),function(v) (is_scalar_integer(v) || is_scalar_double(v) || is_scalar_character(v)) || (is_list(v) && all(lapply(v,function(vi) (is_scalar_integer(vi) || is_scalar_double(vi) || is_scalar_character(vi))))) )) )
+  ) { stop("arg mmap wrong type")}
+  # handle corner case of list(list(char)) conversion to list(list(bytes)) as python expects a list of bytes for StringList
+  is_nested_char <- all(sapply(mmap$values(),function(v) is_list(v) && all(sapply(v,function(vi) is_scalar_character(vi))) ))
+  v <- mmap$values()
+  k <- mmap$keys()
+  if(is_nested_char) {
+    v <- modify_depth(v,2,function(vi) py_builtin$bytes(vi,'utf-8'))
+  }
+  private$py_obj$setMetaValues(py_dict(k,v))
+  invisible()
+}) 
 
 # R implementation of _MetaInfoRegistry
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MetaInfoRegistry.html
@@ -50509,7 +54282,61 @@ Modification <- R6Class(classname = "Modification",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Modification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Modification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Modification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Modification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Modification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Modification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ModificationDefinition
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ModificationDefinition.html
@@ -50715,7 +54542,61 @@ ModificationDefinition <- R6Class(classname = "ModificationDefinition",cloneable
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ModificationDefinition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ModificationDefinition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ModificationDefinition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ModificationDefinition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ModificationDefinition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ModificationDefinition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ModificationDefinitionsSet
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ModificationDefinitionsSet.html
@@ -51202,6 +55083,13 @@ ModificationsDB <- R6Class(classname = "ModificationsDB",cloneable = FALSE,
         return(r_ans)
     }
 )
+)
+ModificationsDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    ModificationsDB$set("public","initialize",function(){
+  private$py_obj <- Pymod$ModificationsDB()
+}, overwrite = TRUE
 ) 
 
 # R implementation of _ModifiedPeptideGenerator
@@ -51306,7 +55194,10 @@ MorpheusScore <- R6Class(classname = "MorpheusScore",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+MorpheusScore$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _MorpheusScore_Result
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1MorpheusScore_Result.html
@@ -52544,11 +56435,11 @@ MzMLSpectrumDecoder <- R6Class(classname = "MzMLSpectrumDecoder",cloneable = FAL
     domParseChromatogram = function(in_, cptr){
     
         if(!((is.R6(in_) && class(in_)[1]=="String") || is_scalar_character(in_))){ stop("arg in_ wrong type") }
-        if(!(all(class(cptr) == c('_Interfaces_Chromatogram','R6')))){ stop("arg cptr wrong type") }
+        if(!(all(class(cptr) == c('Chromatogram','R6')))){ stop("arg cptr wrong type") }
     
         input_cptr <- r_to_py(cptr)
         private$py_obj$domParseChromatogram(in_, input_cptr)
-        byref_1 = py_to_r(input_cptr)
+        byref_1 = Chromatogram$new(input_cptr)
     
         tryCatch({
         eval.parent(substitute(cptr <- byref_1))
@@ -52562,11 +56453,11 @@ MzMLSpectrumDecoder <- R6Class(classname = "MzMLSpectrumDecoder",cloneable = FAL
     domParseSpectrum = function(in_, cptr){
     
         if(!((is.R6(in_) && class(in_)[1]=="String") || is_scalar_character(in_))){ stop("arg in_ wrong type") }
-        if(!(all(class(cptr) == c('_Interfaces_Spectrum','R6')))){ stop("arg cptr wrong type") }
+        if(!(all(class(cptr) == c('Spectrum','R6')))){ stop("arg cptr wrong type") }
     
         input_cptr <- r_to_py(cptr)
         private$py_obj$domParseSpectrum(in_, input_cptr)
-        byref_1 = py_to_r(input_cptr)
+        byref_1 = Spectrum$new(input_cptr)
     
         tryCatch({
         eval.parent(substitute(cptr <- byref_1))
@@ -53171,7 +57062,13 @@ MzXMLFile <- R6Class(classname = "MzXMLFile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    MzXMLFile$set("public","transform", function(path,transformer) {
+    if(!((is.R6(path) && class(path)[1]=="String") || is_scalar_character(path))) { stop("arg path wrong type") }
+    if(!( is.R6(transformer) && class(transformer)[1] %in% c("CachedSwathFileConsumer","MSDataAggregatingConsumer","MSDataCachedConsumer","MSDataSqlConsumer","MSDataStoringConsumer","MzMLSwathFileConsumer","NoopMSDataWritingConsumer","PlainMSDataWritingConsumer","RegularSwathFileConsumer")  )) { stop("arg transformer wrong type") }
+    private$py_obj$transform(path,transformer)
+    invisible()
+} ) 
 
 # R implementation of _NASequence
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1NASequence.html
@@ -53430,6 +57327,71 @@ NASequence <- R6Class(classname = "NASequence",cloneable = FALSE,
     }
 )
 )
+        #' @export
+        `[.NASequence` <- function(x,ix){
+              stopifnot(is.R6(x))
+        if(!( (is_scalar_integer(index) || is_scalar_double(index)) && index == as.integer(index))){ stop("arg index wrong type") }
+    
+        idx = as.integer(index)
+        if (idx < 0) { stop(paste("invalid index ",idx)) }
+        py_ans = x$.__enclos_env__$private$py_obj[as.integer(index)] ; if( is.null(py_ans) ) { return(NULL) }
+        r_ans = Ribonucleotide$new(py_ans)
+        return(r_ans)
+    }
+    #' @export
+    `<.NASequence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.NASequence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.NASequence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.NASequence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.NASequence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.NASequence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
     
     # C++ signature: NASequence fromString(const String & s)
     NASequence$fromString = function(s){
@@ -53775,7 +57737,10 @@ NeutralLossMarker <- R6Class(classname = "NeutralLossMarker",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    NeutralLossMarker$set("public","create",function() {
+  return(NeutralLossMarker$new(private$py_obj$create()))
+}) 
 
 # R implementation of _NoiseEstimator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1NoiseEstimator.html
@@ -53935,7 +57900,10 @@ NonNegativeLeastSquaresSolver <- R6Class(classname = "NonNegativeLeastSquaresSol
         return(r_ans)
     }
 )
-) 
+)
+NonNegativeLeastSquaresSolver$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _NoopMSDataWritingConsumer
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1NoopMSDataWritingConsumer.html
@@ -54376,7 +58344,10 @@ OPXLDataStructs <- R6Class(classname = "OPXLDataStructs",cloneable = FALSE,
 
     private = list(py_obj = NA)
 
-) 
+)
+OPXLDataStructs$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _OPXLHelper
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1OPXLHelper.html
@@ -55161,7 +59132,26 @@ OSChromatogram <- R6Class(classname = "OSChromatogram",cloneable = FALSE,
     
     }
 )
-) 
+)
+    OSChromatogram$set("public","getTimeArray",function() {
+  return(private$py_obj$getTimeArray())
+})
+
+OSChromatogram$set("public","getIntensityArray",function() {
+  return(private$py_obj$getIntensityArray())
+})
+
+OSChromatogram$set("public","setTimeArray",function(data) {
+  if(!(is_double(data))) { stop("arg data wrong type") }
+  private$py_obj$setTimeArray(as.list(data))
+  invisible()
+})
+
+OSChromatogram$set("public","setIntensityArray",function(data) {
+  if(!(is_double(data))) { stop("arg data wrong type") }
+  private$py_obj$setIntensityArray(as.list(data))
+  invisible()
+}) 
 
 # R implementation of _OSChromatogramMeta
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenSwath_1_1OSChromatogramMeta.html
@@ -55270,7 +59260,24 @@ OSSpectrum <- R6Class(classname = "OSSpectrum",cloneable = FALSE,
     
     }
 )
-) 
+)
+    OSSpectrum$set("public","getMZArray",function() {
+  return(private$py_obj$getMZArray())
+})
+
+OSSpectrum$set("public","getIntensityArray",function() {
+  return(private$py_obj$getIntensityArray())
+})
+
+OSSpectrum$set("public","setMZArray",function(data) {
+  if(!(is_double(data))) { stop("arg data wrong type") }
+  return( private$py_obj$setMZArray(as.list(data)) )
+})
+
+OSSpectrum$set("public","setIntensityArray",function(data) {
+  if(!(is_double(data))) { stop("arg data wrong type") }
+  return( private$py_obj$setMZArray(as.list(data)) )
+}) 
 
 # R implementation of _OSSpectrumMeta
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenSwath_1_1OSSpectrumMeta.html
@@ -55492,7 +59499,10 @@ OSW_ChromExtractParams <- R6Class(classname = "OSW_ChromExtractParams",cloneable
         }
 
     )
-) 
+)
+OSW_ChromExtractParams$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _OfflinePrecursorIonSelection
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1OfflinePrecursorIonSelection.html
@@ -55781,7 +59791,7 @@ OnDiscMSExperiment <- R6Class(classname = "OnDiscMSExperiment",cloneable = FALSE
         if(!( (is_scalar_integer(id_) || is_scalar_double(id_)) && id_ == as.integer(id_))){ stop("arg id_ wrong type") }
     
         py_ans = private$py_obj$getSpectrumById(as.integer(id_))
-        r_ans = _Interfaces_Spectrum$new(py_ans)
+        r_ans = Spectrum$new(py_ans)
         return(r_ans)
     },
     
@@ -55791,7 +59801,7 @@ OnDiscMSExperiment <- R6Class(classname = "OnDiscMSExperiment",cloneable = FALSE
         if(!( (is_scalar_integer(id_) || is_scalar_double(id_)) && id_ == as.integer(id_))){ stop("arg id_ wrong type") }
     
         py_ans = private$py_obj$getChromatogramById(as.integer(id_))
-        r_ans = _Interfaces_Chromatogram$new(py_ans)
+        r_ans = Chromatogram$new(py_ans)
         return(r_ans)
     },
     
@@ -56097,7 +60107,21 @@ OpenSwathDataAccessHelper <- R6Class(classname = "OpenSwathDataAccessHelper",clo
         invisible()
     }
 )
-) 
+)
+OpenSwathDataAccessHelper$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    OpenSwathDataAccessHelper$set("public","convertToSpectrumPtr",function(spectrum){
+  if( !(is.R6(spectrum) && class(spectrum)=="MSSpectrum")) { stop("arg spec wrong type") }
+  res <- private$py_obj$convertToSpectrumPtr(spectrum)
+  return(OSSpectrum$new(res))
+} )
+
+OpenSwathDataAccessHelper$set("public","convertToChromatogramPtr",function(chrom){
+  if( !(is.R6(chrom) && class(chrom)=="MSChromatogram")) { stop("arg chrom wrong type") }
+  res <- private$py_obj$convertToChromatogramPtr(chrom)
+  return(OSChromatogram$new(res))
+} ) 
 
 # R implementation of _OpenSwathHelper
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1OpenSwathHelper.html
@@ -56146,7 +60170,10 @@ OpenSwathHelper <- R6Class(classname = "OpenSwathHelper",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+OpenSwathHelper$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _OpenSwathOSWWriter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1OpenSwathOSWWriter.html
@@ -56248,7 +60275,7 @@ OpenSwathScoring <- R6Class(classname = "OpenSwathScoring",cloneable = FALSE,
     },
     
     # C++ signature: void initialize(double rt_normalization_factor, int add_up_spectra, double spacing_for_spectra_resampling, double drift_extra, OpenSwath_Scores_Usage su, libcpp_string spectrum_addition_method)
-    initialize = function(rt_normalization_factor, add_up_spectra, spacing_for_spectra_resampling, drift_extra, su, spectrum_addition_method){
+    initialise = function(rt_normalization_factor, add_up_spectra, spacing_for_spectra_resampling, drift_extra, su, spectrum_addition_method){
     
         if(!(is_scalar_double(rt_normalization_factor))){ stop("arg rt_normalization_factor wrong type") }
         if(!( (is_scalar_integer(add_up_spectra) || is_scalar_double(add_up_spectra)) && add_up_spectra == as.integer(add_up_spectra))){ stop("arg add_up_spectra wrong type") }
@@ -57805,7 +61832,10 @@ OptimizePick_Data <- R6Class(classname = "OptimizePick_Data",cloneable = FALSE,
         }
 
     )
-) 
+)
+OptimizePick_Data$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _PI_PeakArea
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PI_PeakArea.html
@@ -59195,7 +63225,187 @@ Param <- R6Class(classname = "Param",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Param` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Param` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Param` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Param` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Param` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Param` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    Param$set("public","asDict",function(){
+ d <- py_call(private$py_obj$asDict())
+ k <- lapply(py_to_r(py_builtin$list(d$keys())),as.character)
+ v <-  py_to_r(py_builtin$list(d$values()))
+ is_nested <- all(sapply(v, function(vi) is_list(vi) && all(sapply(vi, function(vii) is_list(vii))) ))
+ if(is_nested){
+   v <- modify_depth(v,3,function(vi) {
+     if( class(vi)[1]=="python.builtin.bytes" ){ as.character(vi) }
+     else { vi }
+   } )
+ } else {
+   v <- modify_depth(v,2,function(vi) {
+     if( class(vi)[1]=="python.builtin.bytes" ){ as.character(vi) }
+     else { vi }
+   } )
+ }
+ return(collections::dict(v,k))
+})
+
+Param$set("public","keys",function() {
+  res <- lapply(private$py_obj$keys(),as.character)
+  return(res)
+})
+
+Param$set("public","items",function() {
+  res <- purrr::map2(self$keys(),self$values(),function(i,j) list(i,j))
+  return(res)
+})
+
+Param$set("public","values",function() {
+  v <- private$py_obj$values()
+  is_nested <- all(sapply(v, function(vi) is_list(vi) && all(sapply(vi, function(vii) is_list(vii))) ))
+   if(is_nested){
+   v <- modify_depth(v,3,function(vi) {
+     if( class(vi)[1]=="python.builtin.bytes" ){ as.character(vi) }
+     else { vi }
+   } )
+ } else {
+   v <- modify_depth(v,2,function(vi) {
+     if( class(vi)[1]=="python.builtin.bytes" ){ as.character(vi) }
+     else { vi }
+   } )
+ }
+  return(v)
+})
+
+Param$set("public","update",function(...) {
+  arg_list <- list(...)
+  if (length(arg_list) == 1){
+        if( is.environment(arg_list[[1]]) && identical(parent.env(arg_list[[1]]), asNamespace("collections")) && strsplit(capture.output(arg_list[[1]]$print())," ")[[1]][1] == "dict") {
+          key <- lapply(arg_list[[1]]$keys(),function(k) py_builtin$bytes(k,'utf-8'))
+          is_nested <- all(sapply(arg_list[[1]]$values(), function(vi) is_list(vi) && all(sapply(vi, function(vii) is_list(vii))) ))
+          val <- arg_list[[1]]$values()
+          if(is_nested){
+               val <- modify_depth(val,3,function(vi) {
+              if( is_scalar_character(vi) ){ py_builtin$bytes(vi,'utf-8') }
+              else { vi } } )
+          } else {
+               val <- modify_depth(val,2,function(vi) {
+              if( is_scalar_character(vi) ){ py_builtin$bytes(vi,'utf-8') }
+              else { vi } } )
+          }
+          d <- py_dict(key,val)
+          private$py_obj$update(d)
+          invisible()
+        } else if( is.R6(arg_list[[1]]) && class(arg_list[[1]]) == "Param" ) {
+            private$py_obj$update(arg_list[[1]])
+            invisible()
+        } else {
+          stop("Cannot handle this parameter")
+        }
+  } else if (length(arg_list)==2) {
+    if ( is.R6(arg_list[[1]]) && class(arg_list[[1]])=="Param" && isTRUE(all.equal(arg_list[[1]],as.integer(arg_list[[1]]))) ) {
+      private$py_obj$update(arg_list[[1]],as.integer(arg_list[[2]]))
+      invisible()
+    } else {
+          stop("Cannot handle this parameter")
+    }
+  } else {
+    stop("Invalid parameters provided")
+  }
+})
+
+Param$set("public","get",function(key,default) {
+  if(!is_scalar_character(key)) { stop("wrong arg key") }
+  if(missing(default)) { private$py_obj$get(py_builtin$bytes(key,'utf-8')) }
+  else {
+    private$py_obj$get(py_builtin$bytes(key,'utf-8'),default)
+  }
+})
+
+#' @export
+`[.Param` <- function(x,ix){
+  stopifnot(R6::is.R6(x))
+  if(!is_scalar_character(ix)) { stop("key must be a string")}
+  res <- x$.__enclos_env__$private$py_obj[py_builtin$bytes(ix,'utf-8')]
+  is_nested <- all(sapply(res, function(vi) is_list(vi) && all(sapply(vi, function(vii) is_list(vii))) ))
+  if(is_nested){
+               res <- modify_depth(res,2,function(vi) {
+              if( class(vi)[1] == "python.builtin.bytes" ){ as.character(vi) }
+              else { vi } } )
+  } else {
+               res <- modify_depth(res,1,function(vi) {
+              if( class(vi)[1] == "python.builtin.bytes" ){ as.character(vi) }
+              else { vi } } )
+  }
+  return(res)
+}
+
+#' @export
+`[<-.Param` <- function(x,ix,value){
+  stopifnot(R6::is.R6(x))
+  if(!is_scalar_character(ix)) { stop("key must be a string")}
+  if(!is_list(value)) { stop("arg value wrong type") }
+  is_nested <- all(sapply(value, function(vi) is_list(vi) && all(sapply(vi, function(vii) is_list(vii))) ))
+    if(is_nested){
+               value1 <- modify_depth(value,2,function(vi) {
+              if( is_scalar_character(vi) ){ py_builtin$bytes(vi,'utf-8') }
+              else { vi } } )
+  } else {
+               value1 <- modify_depth(value,1,function(vi) {
+              if( is_scalar_character(vi) ){ py_builtin$bytes(vi,'utf-8') }
+              else { vi } } )
+  }
+  x$.__enclos_env__$private$py_obj[py_builtin$bytes(ix,'utf-8')] = value1
+} 
 
 # R implementation of _ParamEntry
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::Param_1_1ParamEntry.html
@@ -59442,7 +63652,61 @@ ParamEntry <- R6Class(classname = "ParamEntry",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ParamEntry` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ParamEntry` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ParamEntry` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ParamEntry` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ParamEntry` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ParamEntry` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ParamNode
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::Param_1_1ParamNode.html
@@ -59627,7 +63891,61 @@ ParamNode <- R6Class(classname = "ParamNode",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ParamNode` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ParamNode` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ParamNode` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ParamNode` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ParamNode` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ParamNode` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ParamXMLFile
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ParamXMLFile.html
@@ -59872,7 +64190,61 @@ Peak1D <- R6Class(classname = "Peak1D",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Peak1D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Peak1D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Peak1D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Peak1D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Peak1D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Peak1D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _Peak2D
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Peak2D.html
@@ -59974,7 +64346,61 @@ Peak2D <- R6Class(classname = "Peak2D",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Peak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Peak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Peak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Peak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Peak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Peak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeakBoundary
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeakBoundary.html
@@ -60759,7 +65185,61 @@ PeakIndex <- R6Class(classname = "PeakIndex",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.PeakIndex` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.PeakIndex` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.PeakIndex` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.PeakIndex` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.PeakIndex` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.PeakIndex` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeakIntegrator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeakIntegrator.html
@@ -62182,7 +66662,61 @@ PeakShape <- R6Class(classname = "PeakShape",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.PeakShape` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.PeakShape` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.PeakShape` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.PeakShape` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.PeakShape` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.PeakShape` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeakTypeEstimator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeakTypeEstimator.html
@@ -62208,7 +66742,11 @@ PeakTypeEstimator <- R6Class(classname = "PeakTypeEstimator",cloneable = FALSE,
     
     }
 )
-) 
+)
+    PeakTypeEstimator$set("public","estimateType",function(spec){
+  if(!(is.R6(spec) && class(spec)[1]=="MSSpectrum")) { stop("arg spec wrong type") }
+  return(private$py_obj$estimateType(spec))
+}) 
 
 # R implementation of _PeakWidthEstimator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeakWidthEstimator.html
@@ -62924,7 +67462,61 @@ Peptide <- R6Class(classname = "Peptide",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Peptide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Peptide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Peptide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Peptide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Peptide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Peptide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeptideAndProteinQuant
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeptideAndProteinQuant.html
@@ -63657,7 +68249,61 @@ PeptideEvidence <- R6Class(classname = "PeptideEvidence",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.PeptideEvidence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.PeptideEvidence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.PeptideEvidence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.PeptideEvidence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.PeptideEvidence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.PeptideEvidence` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeptideHit
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeptideHit.html
@@ -63959,7 +68605,61 @@ PeptideHit <- R6Class(classname = "PeptideHit",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.PeptideHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.PeptideHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.PeptideHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.PeptideHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.PeptideHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.PeptideHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeptideHit_AnalysisResult
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeptideHit_AnalysisResult.html
@@ -64147,7 +68847,61 @@ PeptideHit_PeakAnnotation <- R6Class(classname = "PeptideHit_PeakAnnotation",clo
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.PeptideHit_PeakAnnotation` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.PeptideHit_PeakAnnotation` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.PeptideHit_PeakAnnotation` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.PeptideHit_PeakAnnotation` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.PeptideHit_PeakAnnotation` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.PeptideHit_PeakAnnotation` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeptideIdentification
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeptideIdentification.html
@@ -64523,7 +69277,61 @@ PeptideIdentification <- R6Class(classname = "PeptideIdentification",cloneable =
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.PeptideIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.PeptideIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.PeptideIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.PeptideIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.PeptideIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.PeptideIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PeptideIndexing
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PeptideIndexing.html
@@ -65017,7 +69825,10 @@ PercolatorFeatureSetHelper <- R6Class(classname = "PercolatorFeatureSetHelper",c
     
     }
 )
-) 
+)
+PercolatorFeatureSetHelper$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _PercolatorOutfile
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PercolatorOutfile.html
@@ -65967,7 +70778,61 @@ Precursor <- R6Class(classname = "Precursor",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Precursor` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Precursor` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Precursor` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Precursor` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Precursor` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Precursor` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PrecursorCorrection
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PrecursorCorrection.html
@@ -66126,7 +70991,10 @@ PrecursorCorrection <- R6Class(classname = "PrecursorCorrection",cloneable = FAL
         return(r_ans)
     }
 )
-) 
+)
+PrecursorCorrection$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _PrecursorIonSelection
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PrecursorIonSelection.html
@@ -66929,7 +71797,61 @@ Prediction <- R6Class(classname = "Prediction",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Prediction` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Prediction` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Prediction` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Prediction` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Prediction` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Prediction` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ProbablePhosphoSites
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProbablePhosphoSites.html
@@ -67145,7 +72067,61 @@ Product <- R6Class(classname = "Product",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Product` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Product` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Product` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Product` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Product` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Product` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ProgressLogger
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProgressLogger.html
@@ -67425,7 +72401,13 @@ ProteaseDB <- R6Class(classname = "ProteaseDB",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+ProteaseDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    ProteaseDB$set("public","initialize",function(spec){
+  private$py_obj <- Pymod$ProteaseDB()
+},overwrite=TRUE) 
 
 # R implementation of _ProteaseDigestion
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProteaseDigestion.html
@@ -67889,7 +72871,61 @@ Protein <- R6Class(classname = "Protein",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Protein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Protein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Protein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Protein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Protein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Protein` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ProteinEntry
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProteinEntry.html
@@ -68403,7 +73439,61 @@ ProteinHit <- R6Class(classname = "ProteinHit",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ProteinHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ProteinHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ProteinHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ProteinHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ProteinHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ProteinHit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ProteinIdentification
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProteinIdentification.html
@@ -68910,7 +74000,61 @@ ProteinIdentification <- R6Class(classname = "ProteinIdentification",cloneable =
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ProteinIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ProteinIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ProteinIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ProteinIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ProteinIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ProteinIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ProteinInference
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProteinInference.html
@@ -69156,7 +74300,61 @@ ProteinProteinCrossLink <- R6Class(classname = "ProteinProteinCrossLink",cloneab
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ProteinProteinCrossLink` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ProteinProteinCrossLink` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ProteinProteinCrossLink` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ProteinProteinCrossLink` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ProteinProteinCrossLink` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ProteinProteinCrossLink` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ProteinResolver
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ProteinResolver.html
@@ -69838,7 +75036,61 @@ Publication <- R6Class(classname = "Publication",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Publication` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Publication` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Publication` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Publication` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Publication` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Publication` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _PurityScores
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1PurityScores.html
@@ -70062,7 +75314,64 @@ QTCluster <- R6Class(classname = "QTCluster",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+QTCluster$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    #' @export
+    `<.QTCluster` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.QTCluster` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.QTCluster` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.QTCluster` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.QTCluster` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.QTCluster` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _QTClusterFinder
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1QTClusterFinder.html
@@ -70710,7 +76019,19 @@ QcMLFile <- R6Class(classname = "QcMLFile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    QcMLFile$set("public","map2csv",function(csv_table,separator){
+  if( !(is.environment(csv_table) && identical(parent.env(csv_table), asNamespace("collections")) && strsplit(capture.output(csv_table$print())," ")[[1]][1] == "dict"
+      && all(sapply(csv_table$keys(),as.character))
+      && all(sapply(csv_table$values(),function(v) is.environment(v) && identical(parent.env(v), asNamespace("collections")) && all(sapply(v$keys(),as.character)) && all(sapply(v$values(), as.character))  ))
+  )) { stop("arg csv_table wrong type")}
+  if(!(is.R6(separator) && class(separator)[1]=="String")) { stop("arg separator wrong type") }
+  k <- lapply(csv_table$keys(),function(k) py_builtin$bytes(k,'utf-8'))
+  v <- lapply(csv_table$values(),function(v) py_dict(lapply(v$keys(),function(k) py_builtin$bytes(k,'utf-8')),lapply(v$values(),function(v) py_builtin$bytes(v,'utf-8'))))
+  d <- py_dict(k,v)
+  res <- private$py_obj$map2csv(d,separator)
+  return(as.character(res))
+}) 
 
 # R implementation of _QualityParameter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1QualityParameter.html
@@ -70887,7 +76208,61 @@ QualityParameter <- R6Class(classname = "QualityParameter",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.QualityParameter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.QualityParameter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.QualityParameter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.QualityParameter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.QualityParameter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.QualityParameter` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _QuantitativeExperimentalDesign
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1QuantitativeExperimentalDesign.html
@@ -71407,7 +76782,10 @@ RNPxlReport <- R6Class(classname = "RNPxlReport",cloneable = FALSE,
     
     }
 )
-) 
+)
+RNPxlReport$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _RNPxlReportRow
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1RNPxlReportRow.html
@@ -71744,7 +77122,10 @@ RNPxlReportRow <- R6Class(classname = "RNPxlReportRow",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+RNPxlReportRow$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _RNPxlReportRowHeader
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1RNPxlReportRowHeader.html
@@ -71765,7 +77146,10 @@ RNPxlReportRowHeader <- R6Class(classname = "RNPxlReportRowHeader",cloneable = F
         return(r_ans)
     }
 )
-) 
+)
+RNPxlReportRowHeader$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _RNaseDB
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1RNaseDB.html
@@ -71832,7 +77216,13 @@ RNaseDB <- R6Class(classname = "RNaseDB",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+RNaseDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    RNaseDB$set("public","initialize",function(){
+  private$py_obj <- Pymod$RNaseDB()
+},overwrite= TRUE) 
 
 # R implementation of _RNaseDigestion
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1RNaseDigestion.html
@@ -72731,7 +78121,61 @@ ReactionMonitoringTransition <- R6Class(classname = "ReactionMonitoringTransitio
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ReactionMonitoringTransition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ReactionMonitoringTransition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ReactionMonitoringTransition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ReactionMonitoringTransition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ReactionMonitoringTransition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ReactionMonitoringTransition` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _RealMassDecomposer
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::ims_1_1RealMassDecomposer.html
@@ -73530,7 +78974,61 @@ Residue <- R6Class(classname = "Residue",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.Residue` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Residue` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Residue` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Residue` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Residue` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Residue` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ResidueDB
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ResidueDB.html
@@ -73632,7 +79130,13 @@ ResidueDB <- R6Class(classname = "ResidueDB",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+ResidueDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    ResidueDB$set("public","initialize",function(){
+  private$py_obj <- Pymod$ResidueDB()
+},overwrite= TRUE) 
 
 # R implementation of _ResidueModification
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ResidueModification.html
@@ -74109,7 +79613,61 @@ ResidueModification <- R6Class(classname = "ResidueModification",cloneable = FAL
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.ResidueModification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ResidueModification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ResidueModification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ResidueModification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ResidueModification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ResidueModification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _ResolverResult
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1ResolverResult.html
@@ -74610,7 +80168,61 @@ RetentionTime <- R6Class(classname = "RetentionTime",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.RetentionTime` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.RetentionTime` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.RetentionTime` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.RetentionTime` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.RetentionTime` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.RetentionTime` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _Ribonucleotide
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::Ribonucleotide_1_1Ribonucleotide.html
@@ -74859,7 +80471,61 @@ Ribonucleotide <- R6Class(classname = "Ribonucleotide",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.Ribonucleotide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Ribonucleotide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Ribonucleotide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Ribonucleotide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Ribonucleotide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Ribonucleotide` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _RibonucleotideDB
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1RibonucleotideDB.html
@@ -74890,7 +80556,22 @@ RibonucleotideDB <- R6Class(classname = "RibonucleotideDB",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+RibonucleotideDB$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    RibonucleotideDB$set("public","initialize",function(){
+  private$py_obj <- Pymod$RibonucleotideDB()
+},overwrite= TRUE)
+
+# C++ signature: libcpp_pair[const Ribonucleotide *,const Ribonucleotide *] getRibonucleotideAlternatives(const libcpp_string & code)
+RibonucleotideDB$set("public","getRibonucleotideAlternatives",function(code){
+  if(!is_scalar_character(code)) { stop("arg code wrong type") }
+  res <- private$py_obj$getRibonucleotideAlternatives(py_builtin$bytes(code,'utf-8'))
+  res[[1]] <- Ribonucleotide$new(res[[1]])
+  res[[2]] <- Ribonucleotide$new(res[[2]])
+  return(res)
+}) 
 
 # R implementation of _RichPeak2D
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1RichPeak2D.html
@@ -75148,7 +80829,61 @@ RichPeak2D <- R6Class(classname = "RichPeak2D",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.RichPeak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.RichPeak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.RichPeak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.RichPeak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.RichPeak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.RichPeak2D` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SILACLabeler
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SILACLabeler.html
@@ -75255,7 +80990,61 @@ SVMData <- R6Class(classname = "SVMData",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.SVMData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.SVMData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.SVMData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.SVMData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.SVMData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.SVMData` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SVMPrediction
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SVMPrediction.html
@@ -75876,7 +81665,61 @@ Sample <- R6Class(classname = "Sample",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.Sample` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Sample` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Sample` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Sample` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Sample` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Sample` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SavitzkyGolayFilter
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SavitzkyGolayFilter.html
@@ -76315,7 +82158,61 @@ ScanWindow <- R6Class(classname = "ScanWindow",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.ScanWindow` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.ScanWindow` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.ScanWindow` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.ScanWindow` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.ScanWindow` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.ScanWindow` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SearchParameters
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SearchParameters.html
@@ -76649,7 +82546,61 @@ SearchParameters <- R6Class(classname = "SearchParameters",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.SearchParameters` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.SearchParameters` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.SearchParameters` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.SearchParameters` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.SearchParameters` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.SearchParameters` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _Seed
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::FeatureFinderAlgorithmPickedHelperStructs_1_1Seed.html
@@ -76706,7 +82657,64 @@ Seed <- R6Class(classname = "Seed",cloneable = FALSE,
     
     public = list(
 )
-) 
+)
+Seed$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
+    #' @export
+    `<.Seed` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Seed` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Seed` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Seed` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Seed` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Seed` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SeedListGenerator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SeedListGenerator.html
@@ -77699,7 +83707,67 @@ SequestInfile <- R6Class(classname = "SequestInfile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.SequestInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.SequestInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.SequestInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.SequestInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.SequestInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.SequestInfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    SequestInfile$set("public","getModifications",function(){
+  d <- py_call(private$py_obj$getModifications)
+  k <- lapply(py_to_r(py_builtin$list(d$keys())),as.character)
+  v <- modify_depth(py_to_r(py_builtin$list(d$values())),2, function(s) String$new(s))
+  return(collections::dict(v,k))
+}) 
 
 # R implementation of _SequestOutfile
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SequestOutfile.html
@@ -77816,7 +83884,98 @@ SequestOutfile <- R6Class(classname = "SequestOutfile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.SequestOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.SequestOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.SequestOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.SequestOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.SequestOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.SequestOutfile` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    SequestOutfile$set("public","getSequences",function(database_filename,ac_position_map,sequences,found,not_found){
+  if(!(is.R6(database_filename) && class(database_filename)[1]=="String")) { stop("arg database_filename wrong type") }
+  if( !(is.environment(ac_position_map) && identical(parent.env(ac_position_map), asNamespace("collections")) && strsplit(capture.output(ac_position_map$print())," ")[[1]][1] == "dict"
+      && all(sapply(ac_position_map$keys(),is_scalar_character))
+      && all(sapply(ac_position_map$values(),function(v) isTRUE(all.equal(v,as.integer(v))) ))
+  )) { stop("arg ac_position_map wrong type")}
+  if(!( (is_list(sequences) || is_vector(sequences)) && all(sapply(sequences,is_scalar_character)) )) { stop("arg sequences wrong type") }
+  if(!( is_list(found) && all(sapply(found,function(f) is_list(f,2) && is_scalar_character(f[[1]]) && is_scalar_integer(f[[2]]))) )) { stop("arg found wrong type") }
+  if( !(is.environment(not_found) && identical(parent.env(not_found), asNamespace("collections")) && strsplit(capture.output(not_found$print())," ")[[1]][1] == "dict"
+      && all(sapply(not_found$keys(),is_scalar_character))
+      && all(sapply(not_found$values(),function(v) isTRUE(all.equal(v,as.integer(v))) ))
+  )) { stop("arg not_found wrong type") }
+  k1 <- lapply(ac_position_map$keys(),function(k) py_builtin$bytes(k,'utf-8'))
+  v1 <- lapply(ac_position_map$values(),as.integer)
+  temp1 <- py_dict(k1,v1)
+  seq1 <- r_to_py(lapply(sequences,function(s) py_builtin$bytes(s,'utf-8')))
+  found1 <- r_to_py(modify_depth(found,1,function(p) list(py_builtin$bytes(p[[1]],'utf-8'),p[[2]])))
+  k1 <- lapply(not_found$keys(),function(k) py_builtin$bytes(k,'utf-8'))
+  v1 <- lapply(not_found$values(),as.integer)
+  temp2 <- py_dict(k1,v1)
+  private$py_obj$getSequences(database_filename,temp1,seq1,found1,temp2)
+  k1 <- lapply(py_to_r(py_builtin$list(temp1$keys())),as.character)
+  v1 <- py_to_r(py_builtin$list(temp1$values()))
+  temp1 <- collections::dict(v1,k1)
+  seq1 <- lapply(py_to_r(seq1),as.character)
+  found1 <- modify_depth(py_to_r(found1),1,function(p) list(as.character(p[[1]]),p[[2]]))
+  k1 <- lapply(py_to_r(py_builtin$list(temp2$keys())),as.character)
+  v1 <- py_to_r(py_builtin$list(temp2$values()))
+  temp2 <- collections::dict(v1,k1)
+  tryCatch({
+    eval.parent(ac_position_map <- temp1)
+    eval.parent(sequences <- seq1)
+    eval.parent(found <- found1)
+    eval.parent(not_found <- temp2)
+    invisible()
+           }, error = function(){ invisible() })
+}) 
 
 # R implementation of _SignalToNoiseEstimatorMeanIterative[_MSSpectrum]
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SignalToNoiseEstimatorMeanIterative[_MSSpectrum].html
@@ -77961,6 +84120,32 @@ SignalToNoiseEstimatorMedian <- R6Class(classname = "SignalToNoiseEstimatorMedia
         return(r_ans)
     }
 )
+)
+    SignalToNoiseEstimatorMedianChrom <- R6Class(classname="SignalToNoiseEstimatorMedianChrom",cloneable = FALSE,
+    private = list(py_obj=NA),
+
+    public = list(
+      initialize = function(in_0){
+        if(missing(in_0)){
+          private$py_obj <- Pymod$SignalToNoiseEstimatorMedianChrom()
+        } else {
+          if (is.R6(in_0) && class(in_0)[1]=="SignalToNoiseEstimatorMedianChrom" ){
+            private$py_obj <- Pymod$SignalToNoiseEstimatorMedianChrom(in_0)
+          } else {
+            stop("arg in_0 wrong type")
+          }
+        }
+      },
+    init = function(chromatogram){
+      if (!(is.R6(chromatogram) && class(chromatogram)[1]=="MSChromatogram")){ stop("arg chromatogram wrong type") }
+        private$py_obj$init(chromatogram)
+        invisible()
+    },
+    getSignalToNoise = function(data_point){
+      if(!(is.R6(data_point) && class(data_point)[1]=="ChromatogramPeak")) { stop("arg data_point wrong type") }
+      private$py_obj$getSignalToNoise(data_point)
+    }
+    )
 ) 
 
 # R implementation of _SignalToNoiseEstimatorMedianRapid
@@ -77992,7 +84177,7 @@ SignalToNoiseEstimatorMedianRapid <- R6Class(classname = "SignalToNoiseEstimator
     # C++ signature: NoiseEstimator estimateNoise(shared_ptr[_Interfaces_Spectrum])
     estimateNoise_0 = function(in_0){
     
-        if(!(all(class(in_0) == c('_Interfaces_Spectrum','R6')))){ stop("arg in_0 wrong type") }
+        if(!(all(class(in_0) == c('Spectrum','R6')))){ stop("arg in_0 wrong type") }
         input_in_0 <- r_to_py(in_0)
         py_ans = private$py_obj$`_estimateNoise_0`(input_in_0)
         r_ans = NoiseEstimator$new(py_ans)
@@ -78002,7 +84187,7 @@ SignalToNoiseEstimatorMedianRapid <- R6Class(classname = "SignalToNoiseEstimator
     # C++ signature: NoiseEstimator estimateNoise(shared_ptr[_Interfaces_Chromatogram])
     estimateNoise_1 = function(in_0){
     
-        if(!(all(class(in_0) == c('_Interfaces_Chromatogram','R6')))){ stop("arg in_0 wrong type") }
+        if(!(all(class(in_0) == c('Chromatogram','R6')))){ stop("arg in_0 wrong type") }
         input_in_0 <- r_to_py(in_0)
         py_ans = private$py_obj$`_estimateNoise_1`(input_in_0)
         r_ans = NoiseEstimator$new(py_ans)
@@ -78028,8 +84213,8 @@ SignalToNoiseEstimatorMedianRapid <- R6Class(classname = "SignalToNoiseEstimator
     # C++ signature: NoiseEstimator estimateNoise(libcpp_vector[double] mz_array, libcpp_vector[double] int_array)
     estimateNoise = function(...){
         arg_list = list(...)
-        if ((length(arg_list)==1) && (all(class(arg_list[[1]]) == c('_Interfaces_Spectrum','R6')))) { self$estimateNoise_0(...) }
-        else if ((length(arg_list)==1) && (all(class(arg_list[[1]]) == c('_Interfaces_Chromatogram','R6')))) { self$estimateNoise_1(...) }
+        if ((length(arg_list)==1) && (all(class(arg_list[[1]]) == c('Spectrum','R6')))) { self$estimateNoise_0(...) }
+        else if ((length(arg_list)==1) && (all(class(arg_list[[1]]) == c('Chromatogram','R6')))) { self$estimateNoise_1(...) }
         else if ((length(arg_list)==2) && (is_list(arg_list[[1]]) && all(sapply(arg_list[[1]],function(elemt_rec) is_scalar_double(elemt_rec)))) && (is_list(arg_list[[2]]) && all(sapply(arg_list[[2]],function(elemt_rec) is_scalar_double(elemt_rec))))) { self$estimateNoise_2(...) }
         else {
               stop("wrong arguments provided")
@@ -78093,7 +84278,7 @@ SimRandomNumberGenerator <- R6Class(classname = "SimRandomNumberGenerator",clone
     },
     
     # C++ signature: void initialize(bool biological_random, bool technical_random)
-    initialize = function(biological_random, technical_random){
+    initialise = function(biological_random, technical_random){
     
         if(!( (is_scalar_integer(biological_random) || is_scalar_double(biological_random)) && biological_random == as.integer(biological_random))){ stop("arg biological_random wrong type") }
         if(!( (is_scalar_integer(technical_random) || is_scalar_double(technical_random)) && technical_random == as.integer(technical_random))){ stop("arg technical_random wrong type") }
@@ -80544,7 +86729,7 @@ SpectrumAccessOpenMS <- R6Class(classname = "SpectrumAccessOpenMS",cloneable = F
         private$py_obj <- Pymod$SpectrumAccessOpenMS(input_ms_experiment)
         invisible()
     
-        byref_0 = py_to_r(input_ms_experiment)
+        byref_0 = MSExperiment$new(input_ms_experiment)
     
     },
     
@@ -81230,7 +87415,10 @@ SpectrumAccessTransforming <- R6Class(classname = "SpectrumAccessTransforming",c
         return(r_ans)
     }
 )
-) 
+)
+SpectrumAccessTransforming$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _SpectrumAlignment
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SpectrumAlignment.html
@@ -81323,7 +87511,17 @@ SpectrumAlignment <- R6Class(classname = "SpectrumAlignment",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    SpectrumAlignment$set("public","getSpectrumAlignment",function(result,spec1,spec2){
+  if(!is_list(result)) { stop("arg result should be a list") }
+  if(!(is.R6(spec1) && class(spec1)[1]=="MSSpectrum" && is.R6(spec2) && class(spec2)[1]=="MSSpectrum")) { stop("spec1 and spec2 be MSSpectrum object") }
+  result1 <- py_to_r(result)
+  private$py_obj$getSpectrumAlignment(result1,spec1,spec2)
+  tryCatch({
+    eval.parent(substitute(result <- r_to_py(result1)))
+    invisible()
+           }, error = function(e) { invisible()})
+}) 
 
 # R implementation of _SpectrumAlignmentScore
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SpectrumAlignmentScore.html
@@ -81416,7 +87614,17 @@ SpectrumAlignmentScore <- R6Class(classname = "SpectrumAlignmentScore",cloneable
         invisible()
     }
 )
-) 
+)
+    SpectrumAlignmentScore$set("public","score_1",function(spec1){
+  if(!(is.R6(spec1) && class(spec1)[1]=="MSSpectrum")) stop("arg spec1 wrong type")
+  private$py_obj(spec1)
+})
+
+SpectrumAlignmentScore$set("public","score_2",function(spec1,spec2){
+  if(!(is.R6(spec1) && class(spec1)[1]=="MSSpectrum")) stop("arg spec1 wrong type")
+  if(!(is.R6(spec2) && class(spec2)[1]=="MSSpectrum")) stop("arg spec2 wrong type")
+  private$py_obj(spec1,spec2)
+}) 
 
 # R implementation of _SpectrumAnnotator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SpectrumAnnotator.html
@@ -81548,6 +87756,9 @@ SpectrumHelper <- R6Class(classname = "SpectrumHelper",cloneable = FALSE,
     private = list(py_obj = NA)
 
 )
+SpectrumHelper$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
     
     # C++ signature: void removePeaks(MSChromatogram & p, double pos_start, double pos_end)
     SpectrumHelper$removePeaks = function(p, pos_start, pos_end){
@@ -81743,7 +87954,61 @@ SpectrumIdentification <- R6Class(classname = "SpectrumIdentification",cloneable
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.SpectrumIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.SpectrumIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.SpectrumIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.SpectrumIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.SpectrumIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.SpectrumIdentification` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SpectrumLookup
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SpectrumLookup.html
@@ -82562,7 +88827,61 @@ SpectrumSettings <- R6Class(classname = "SpectrumSettings",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.SpectrumSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.SpectrumSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.SpectrumSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.SpectrumSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.SpectrumSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.SpectrumSettings` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SplineInterpolatedPeaks
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SplineInterpolatedPeaks.html
@@ -83200,7 +89519,73 @@ String <- R6Class(classname = "String",cloneable = FALSE,
     
     }
 )
-) 
+)
+    #' @export
+    `<.String` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.String` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.String` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.String` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.String` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.String` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    String$set("public","initialize",function(in_0){
+  if(missing(in_0)){
+    private$py_obj <- Pymod$String()
+  } else {
+    if(!is_scalar_character(in_0)) stop("arg in_0 must be a string")
+    private$py_obj <- Pymod$String(in_0)
+  }
+},overwrite=TRUE)
+
+String$set("public","toString",function(){
+  private$py_obj$toString()
+}) 
 
 # R implementation of _StringDataArray
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::DataArrays_1_1StringDataArray.html
@@ -83393,7 +89778,80 @@ StringDataArray <- R6Class(classname = "StringDataArray",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.StringDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.StringDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.StringDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.StringDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.StringDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.StringDataArray` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+`[.StringDataArray` <- function(x,ix){
+  stopifnot(is.R6(x))
+  if(!isTRUE(all.equal(ix,as.integer(ix)))) { stop("index should be an integer") }
+  tryCatch({
+    res <- x$.__enclos_env__$private$py_obj[as.integer(ix)-1]
+    return(as.character(res))
+           }, error = function(e){ e })
+}
+
+#' @export
+`[<-.StringDataArray` <- function(x,ix,value) {
+  stopifnot(is.R6(x))
+  if(!isTRUE(all.equal(ix,as.integer(ix)))) { stop("index should be an integer") }
+  if(!( (is.R6(value) && class(value)[1]=="String") || is_scalar_character(value) )) { stop("value must be a string or String object") }
+  tryCatch({
+    x$.__enclos_env__$private$py_obj[as.integer(ix)-1] <- value
+           }, error = function(e){ e })
+} 
 
 # R implementation of _StringView
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1StringView.html
@@ -83486,7 +89944,61 @@ StringView <- R6Class(classname = "StringView",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+    #' @export
+    `<.StringView` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.StringView` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.StringView` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.StringView` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.StringView` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.StringView` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _SvmModelParameterSet
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SvmModelParameterSet.html
@@ -83610,7 +90122,10 @@ SvmModelParameterSet <- R6Class(classname = "SvmModelParameterSet",cloneable = F
         }
 
     )
-) 
+)
+SvmModelParameterSet$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _SvmTheoreticalSpectrumGenerator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SvmTheoreticalSpectrumGenerator.html
@@ -84000,7 +90515,10 @@ SwathFile <- R6Class(classname = "SwathFile",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+SwathFile$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _SwathMap
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenSwath_1_1SwathMap.html
@@ -84111,7 +90629,20 @@ SwathMap <- R6Class(classname = "SwathMap",cloneable = FALSE,
     
     }
 )
-) 
+)
+    SwathMap$set("public","getSpectrumPtr",function() {
+  tryCatch({
+    obj <- private$py_obj$getSpectrumPtr()
+    ans <- eval(parse(text = paste0(class_to_wrap(obj),"$","new(obj)")))
+    return(ans)
+           }, error = function(e) { "Did not find suitable conversion to Python object" })
+})
+
+SwathMap$set("public","setSpectrumPtr",function(arg) {
+  if(!(is.R6(arg) && class(arg)[1] %in% c("SpectrumAccessOpenMS","SpectrumAccessOpenMSCached","SpectrumAccessOpenMSInMemory","SpectrumAccessQuadMZTransforming") )) { stop("Need to provide suitable ISpectrumAccess-derived child class") }
+  private$py_obj$setSpectrumPtr(arg)
+  invisible()
+}) 
 
 # R implementation of _SwathMapMassCorrection
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SwathMapMassCorrection.html
@@ -84119,7 +90650,10 @@ SwathMapMassCorrection <- R6Class(classname = "SwathMapMassCorrection",cloneable
 
     private = list(py_obj = NA)
 
-) 
+)
+SwathMapMassCorrection$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _SwathWindowLoader
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1SwathWindowLoader.html
@@ -84949,7 +91483,61 @@ TM_DataPoint <- R6Class(classname = "TM_DataPoint",cloneable = FALSE,
     
     }
 )
-) 
+)
+    #' @export
+    `<.TM_DataPoint` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.TM_DataPoint` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.TM_DataPoint` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.TM_DataPoint` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.TM_DataPoint` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.TM_DataPoint` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _TOFCalibration
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1TOFCalibration.html
@@ -85993,6 +92581,60 @@ TargetedExperiment <- R6Class(classname = "TargetedExperiment",cloneable = FALSE
        added <- e1$.__enclos_env__$private$py_obj + e2$.__enclos_env__$private$py_obj
        result <- TargetedExperiment$new(added)
        return(result)
+    }
+    #' @export
+    `<.TargetedExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.TargetedExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.TargetedExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.TargetedExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.TargetedExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.TargetedExperiment` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
     } 
 
 # R implementation of _TargetedExperiment_Instrument
@@ -86347,7 +92989,61 @@ TargetedExperiment_Instrument <- R6Class(classname = "TargetedExperiment_Instrum
     
     }
 )
-) 
+)
+    #' @export
+    `<.TargetedExperiment_Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.TargetedExperiment_Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.TargetedExperiment_Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.TargetedExperiment_Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.TargetedExperiment_Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.TargetedExperiment_Instrument` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _TargetedExperiment_Interpretation
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::TargetedExperimentHelper::RetentionTime::RTUnit_1_1TargetedExperiment_Interpretation.html
@@ -87362,7 +94058,10 @@ TheoreticalIsotopePattern <- R6Class(classname = "TheoreticalIsotopePattern",clo
         return(r_ans)
     }
 )
-) 
+)
+TheoreticalIsotopePattern$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _TheoreticalSpectrumGenerator
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1TheoreticalSpectrumGenerator.html
@@ -88091,7 +94790,61 @@ TraMLProduct <- R6Class(classname = "TraMLProduct",cloneable = FALSE,
         invisible()
     }
 )
-) 
+)
+    #' @export
+    `<.TraMLProduct` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.TraMLProduct` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.TraMLProduct` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.TraMLProduct` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.TraMLProduct` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.TraMLProduct` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _TraceInfo
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1TraceInfo.html
@@ -89716,7 +96469,10 @@ UniqueIdGenerator <- R6Class(classname = "UniqueIdGenerator",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+UniqueIdGenerator$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _Unit
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1Unit.html
@@ -89831,7 +96587,61 @@ Unit <- R6Class(classname = "Unit",cloneable = FALSE,
     
     }
 )
-) 
+)
+    #' @export
+    `<.Unit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.Unit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.Unit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.Unit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.Unit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.Unit` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    } 
 
 # R implementation of _VersionDetails
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1VersionDetails.html
@@ -89918,6 +96728,60 @@ VersionDetails <- R6Class(classname = "VersionDetails",cloneable = FALSE,
     }
 )
 )
+    #' @export
+    `<.VersionDetails` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj < e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `==.VersionDetails` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj == e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>.VersionDetails` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj > e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `<=.VersionDetails` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj <= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `!=.VersionDetails` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj != e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
+    #' @export
+    `>=.VersionDetails` = function(e1,e2){
+        stopifnot(is.R6(e1))
+        stopifnot(is.R6(e2))
+        tryCatch({
+            e1$.__enclos_env__$private$py_obj >= e2$.__enclos_env__$private$py_obj
+        },  error = function(e) { e }
+        )
+    }
     
     # C++ signature: VersionDetails create(String)
     VersionDetails$create = function(in_0){
@@ -89936,6 +96800,9 @@ VersionInfo <- R6Class(classname = "VersionInfo",cloneable = FALSE,
     private = list(py_obj = NA)
 
 )
+VersionInfo$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE)
     
     # C++ signature: String getBranch()
     VersionInfo$getBranch = function(){
@@ -90772,7 +97639,10 @@ XQuestScores <- R6Class(classname = "XQuestScores",cloneable = FALSE,
         return(r_ans)
     }
 )
-) 
+)
+XQuestScores$set("public","initialize",function(){
+   private$py_obj <- Pymod$rname()
+},overwrite = TRUE) 
 
 # R implementation of _XTandemInfile
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS_1_1XTandemInfile.html
@@ -91187,7 +98057,7 @@ XTandemXMLFile <- R6Class(classname = "XTandemXMLFile",cloneable = FALSE,
 
 # R implementation of _BinaryDataArray
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::Interfaces_1_1BinaryDataArray.html
-_Interfaces_BinaryDataArray <- R6Class(classname = "_Interfaces_BinaryDataArray",cloneable = FALSE,
+BinaryDataArray <- R6Class(classname = "BinaryDataArray",cloneable = FALSE,
 
     private = list(py_obj = NA),
 
@@ -91216,7 +98086,7 @@ _Interfaces_BinaryDataArray <- R6Class(classname = "_Interfaces_BinaryDataArray"
     init_0 = function(){
     
     
-        private$py_obj <- Pymod$_Interfaces_BinaryDataArray()
+        private$py_obj <- Pymod$Interfaces$BinaryDataArray()
         invisible()
     
     
@@ -91225,10 +98095,10 @@ _Interfaces_BinaryDataArray <- R6Class(classname = "_Interfaces_BinaryDataArray"
     # C++ signature: void _Interfaces_BinaryDataArray(_Interfaces_BinaryDataArray)
     init_1 = function(in_0){
     
-        if(!(is.R6(in_0) && class(in_0)[1] == "_Interfaces_BinaryDataArray")){ stop("arg in_0 wrong type") }
+        if(!(is.R6(in_0) && class(in_0)[1] == "BinaryDataArray")){ stop("arg in_0 wrong type") }
     
     
-        private$py_obj <- Pymod$_Interfaces_BinaryDataArray(in_0)
+        private$py_obj <- Pymod$Interfaces$BinaryDataArray(in_0)
         invisible()
     
     
@@ -91239,11 +98109,11 @@ _Interfaces_BinaryDataArray <- R6Class(classname = "_Interfaces_BinaryDataArray"
     initialize = function(...){
         arg_list = list(...)
         if (length(arg_list)==0) { self$init_0(...) }
-        else if ((length(arg_list)==1) && (is.R6(arg_list[[1]]) && class(arg_list[[1]])[1] == "_Interfaces_BinaryDataArray")) { self$init_1(...) }
+        else if ((length(arg_list)==1) && (is.R6(arg_list[[1]]) && class(arg_list[[1]])[1] == "BinaryDataArray")) { self$init_1(...) }
         else{
                # to create a new R object and set its underlying python object as the one supplied in the constructor.
                # this helps avoid use of set_py_object(), s.t., the user is not able to manipulate the python object in a direct fashion.
-               if( length(arg_list)==1 && ( "python.builtin.object" %in% class(arg_list[[1]]) && class_to_wrap(arg_list[[1]]) == "_Interfaces_BinaryDataArray" ) )
+               if( length(arg_list)==1 && ( "python.builtin.object" %in% class(arg_list[[1]]) && class_to_wrap(arg_list[[1]]) == "BinaryDataArray" ) )
                { private$py_obj <- arg_list[[1]]  }
                else {
                     stop("wrong arguments provided")
@@ -91256,7 +98126,7 @@ _Interfaces_BinaryDataArray <- R6Class(classname = "_Interfaces_BinaryDataArray"
 
 # R implementation of _Chromatogram
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::Interfaces_1_1Chromatogram.html
-_Interfaces_Chromatogram <- R6Class(classname = "_Interfaces_Chromatogram",cloneable = FALSE,
+Chromatogram <- R6Class(classname = "Chromatogram",cloneable = FALSE,
 
     private = list(py_obj = NA),
 
@@ -91267,7 +98137,7 @@ _Interfaces_Chromatogram <- R6Class(classname = "_Interfaces_Chromatogram",clone
     init_0 = function(){
     
     
-        private$py_obj <- Pymod$_Interfaces_Chromatogram()
+        private$py_obj <- Pymod$Interfaces$Chromatogram()
         invisible()
     
     
@@ -91276,10 +98146,10 @@ _Interfaces_Chromatogram <- R6Class(classname = "_Interfaces_Chromatogram",clone
     # C++ signature: void _Interfaces_Chromatogram(_Interfaces_Chromatogram)
     init_1 = function(in_0){
     
-        if(!(is.R6(in_0) && class(in_0)[1] == "_Interfaces_Chromatogram")){ stop("arg in_0 wrong type") }
+        if(!(is.R6(in_0) && class(in_0)[1] == "Chromatogram")){ stop("arg in_0 wrong type") }
     
     
-        private$py_obj <- Pymod$_Interfaces_Chromatogram(in_0)
+        private$py_obj <- Pymod$Interfaces$Chromatogram(in_0)
         invisible()
     
     
@@ -91290,11 +98160,11 @@ _Interfaces_Chromatogram <- R6Class(classname = "_Interfaces_Chromatogram",clone
     initialize = function(...){
         arg_list = list(...)
         if (length(arg_list)==0) { self$init_0(...) }
-        else if ((length(arg_list)==1) && (is.R6(arg_list[[1]]) && class(arg_list[[1]])[1] == "_Interfaces_Chromatogram")) { self$init_1(...) }
+        else if ((length(arg_list)==1) && (is.R6(arg_list[[1]]) && class(arg_list[[1]])[1] == "Chromatogram")) { self$init_1(...) }
         else{
                # to create a new R object and set its underlying python object as the one supplied in the constructor.
                # this helps avoid use of set_py_object(), s.t., the user is not able to manipulate the python object in a direct fashion.
-               if( length(arg_list)==1 && ( "python.builtin.object" %in% class(arg_list[[1]]) && class_to_wrap(arg_list[[1]]) == "_Interfaces_Chromatogram" ) )
+               if( length(arg_list)==1 && ( "python.builtin.object" %in% class(arg_list[[1]]) && class_to_wrap(arg_list[[1]]) == "Chromatogram" ) )
                { private$py_obj <- arg_list[[1]]  }
                else {
                     stop("wrong arguments provided")
@@ -91303,11 +98173,32 @@ _Interfaces_Chromatogram <- R6Class(classname = "_Interfaces_Chromatogram",clone
     
     }
 )
-) 
+)
+    # Returns a vector of double values.
+Chromatogram$set("public","getTimeArray",function() {
+  return(private$py_obj$getTimeArray())
+} )
+
+# Returns a vector of double values.
+Chromatogram$set("public","getIntensityArray",function() {
+  return(private$py_obj$getIntensityArray())
+} )
+
+Chromatogram$set("public","setTimeArray",function(data) {
+  if ( !(is_double(data) || is_integer(data)) ) { stop("arg transitions wrong type") }
+  private$py_obj$setTimeArray(as.list(data))
+  invisible()
+} )
+
+Chromatogram$set("public","setIntensityArray",function(data) {
+  if ( !(is_double(data) || is_integer(data)) ) { stop("arg transitions wrong type") }
+  private$py_obj$setIntensityArray(as.list(data))
+  invisible()
+} ) 
 
 # R implementation of _Spectrum
 # Documentation is available at http://www.openms.de/current_doxygen/html/classOpenMS::Interfaces_1_1Spectrum.html
-_Interfaces_Spectrum <- R6Class(classname = "_Interfaces_Spectrum",cloneable = FALSE,
+Spectrum <- R6Class(classname = "Spectrum",cloneable = FALSE,
 
     private = list(py_obj = NA),
 
@@ -91318,7 +98209,7 @@ _Interfaces_Spectrum <- R6Class(classname = "_Interfaces_Spectrum",cloneable = F
     init_0 = function(){
     
     
-        private$py_obj <- Pymod$_Interfaces_Spectrum()
+        private$py_obj <- Pymod$Interfaces$Spectrum()
         invisible()
     
     
@@ -91327,10 +98218,10 @@ _Interfaces_Spectrum <- R6Class(classname = "_Interfaces_Spectrum",cloneable = F
     # C++ signature: void _Interfaces_Spectrum(_Interfaces_Spectrum)
     init_1 = function(in_0){
     
-        if(!(is.R6(in_0) && class(in_0)[1] == "_Interfaces_Spectrum")){ stop("arg in_0 wrong type") }
+        if(!(is.R6(in_0) && class(in_0)[1] == "Spectrum")){ stop("arg in_0 wrong type") }
     
     
-        private$py_obj <- Pymod$_Interfaces_Spectrum(in_0)
+        private$py_obj <- Pymod$Interfaces$Spectrum(in_0)
         invisible()
     
     
@@ -91341,11 +98232,11 @@ _Interfaces_Spectrum <- R6Class(classname = "_Interfaces_Spectrum",cloneable = F
     initialize = function(...){
         arg_list = list(...)
         if (length(arg_list)==0) { self$init_0(...) }
-        else if ((length(arg_list)==1) && (is.R6(arg_list[[1]]) && class(arg_list[[1]])[1] == "_Interfaces_Spectrum")) { self$init_1(...) }
+        else if ((length(arg_list)==1) && (is.R6(arg_list[[1]]) && class(arg_list[[1]])[1] == "Spectrum")) { self$init_1(...) }
         else{
                # to create a new R object and set its underlying python object as the one supplied in the constructor.
                # this helps avoid use of set_py_object(), s.t., the user is not able to manipulate the python object in a direct fashion.
-               if( length(arg_list)==1 && ( "python.builtin.object" %in% class(arg_list[[1]]) && class_to_wrap(arg_list[[1]]) == "_Interfaces_Spectrum" ) )
+               if( length(arg_list)==1 && ( "python.builtin.object" %in% class(arg_list[[1]]) && class_to_wrap(arg_list[[1]]) == "Spectrum" ) )
                { private$py_obj <- arg_list[[1]]  }
                else {
                     stop("wrong arguments provided")
@@ -91354,7 +98245,28 @@ _Interfaces_Spectrum <- R6Class(classname = "_Interfaces_Spectrum",cloneable = F
     
     }
 )
-) 
+)
+    # Returns a vector of double values.
+Spectrum$set("public","getMZArray",function() {
+  return(private$py_obj$getMZArray())
+} )
+
+# Returns a vector of double values.
+Spectrum$set("public","getIntensityArray",function() {
+  return(private$py_obj$getIntensityArray())
+} )
+
+Spectrum$set("public","setMZArray",function(data) {
+  if ( !(is_double(data) || is_integer(data)) ) { stop("arg transitions wrong type") }
+  private$py_obj$setMZArray(as.list(data))
+  invisible()
+} )
+
+Spectrum$set("public","setIntensityArray",function(data) {
+  if ( !(is_double(data) || is_integer(data)) ) { stop("arg transitions wrong type") }
+  private$py_obj$setIntensityArray(as.list(data))
+  invisible()
+} ) 
 
 # R implementation of _streampos
 # Documentation is available at http://www.openms.de/current_doxygen/html/classstd_1_1streampos.html
@@ -93544,3 +100456,100 @@ XRefType_CVTerm_ControlledVocabulary = R6Class(classname = "XRefType_CVTerm_Cont
         }
     )
 ) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+DPosition1 <- R6Class(classname="DPosition1",cloneable = FALSE,
+    private = list(py_obj = NA),
+    public = list(
+    initialize = function(a){
+      if(missing(a)){
+        private$py_obj <- Pymod$DPosition1()
+      } else {
+        if( "python.builtin.object" %in% class(a) && class_to_wrap(a) == "DPosition1"){
+          private$py_obj <- a
+        } else if(is_scalar_double(a)){
+          private$py_obj <- Pymod$DPosition1(a)
+        } else {
+          stop("wrong argument a")
+        }
+      }
+
+    }
+    )
+)
+
+#' @export
+`[.DPosition1` <- function(x,ix){
+  stopifnot(R6::is.R6(x))
+  if(!ix==1) { stop(paste0("invalid index ",ix)) }
+  return(x$.__enclos_env__$privat$py_obj[0])
+}
+
+DPosition2 <- R6Class(classname="DPosition2",cloneable = FALSE,
+    private = list(py_obj = NA),
+
+    public = list(
+    initialize = function(a,b){
+      if(missing(a) && missing(b)){
+        private$py_obj <- Pymod$DPosition1()
+      } else if(missing(b)){
+        if("python.builtin.object" %in% class(a) && class_to_wrap(a) == "DPosition2"){ private$py_obj <- a }
+        else { stop("wrong argument provided") }
+      } else {
+        if (!(is_scalar_double(a) && is_scalar_double(b))) { stop("Both arguments must be a double!!") }
+        private$py_obj <- Pymod$DPosition2(a,b)
+      }
+    }
+    )
+)
+
+#' @export
+`[.DPosition2` <- function(x,ix){
+  stopifnot(R6::is.R6(x))
+  if(!ix %in% c(1,2)) { stop(paste0("invalid index ",ix)) }
+  return(x$.__enclos_env__$private$py_obj[ix-1])
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+PeakSpectrum = MSSpectrum
+
+PeakMap = MSExperiment 

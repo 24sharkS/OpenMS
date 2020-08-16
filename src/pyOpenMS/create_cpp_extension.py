@@ -54,7 +54,9 @@ PY_NUM_MODULES = 1
 
 src_pyopenms = j(OPEN_MS_SRC, "src/pyOpenMS")
 pxd_files = glob.glob(src_pyopenms + "/pxds/*.pxd")
-addons = glob.glob(src_pyopenms + "/addons/*.pyx")
+# addons = glob.glob(src_pyopenms + "/addons/*.pyx")
+# setting the appropriate path for R specific addons
+addons = glob.glob(src_pyopenms + "/R-addons/*.R")
 converters = [j(src_pyopenms, "converters")]
 
 persisted_data_path = "include_dir.bin"
@@ -111,55 +113,56 @@ for pxd_f, m in zip(pxd_files_chunk, mnames):
 
     allDecl_mapping[m] =  {"decls" : tmp_decls, "addons" : [] , "files" : pxd_f}
 
-# Commenting out for now.
+
 # Deal with addons, make sure the addons are added to the correct compilation
 # unit (e.g. where the name corresponds to the pxd file).
 # Note that there are some special cases, e.g. addons that go into the first
 # unit or all *but* the first unit.
-# is_added = [False for k in addons]
-# for modname in mnames:
-#
-#     for k,a in enumerate(addons):
-#         # Deal with special code that needs to go into all modules, only the
-#         # first or only all other modules...
-#         if modname == mnames[0]:
-#             if os.path.basename(a) == "ADD_TO_FIRST" + ".pyx":
-#                 allDecl_mapping[modname]["addons"].append(a)
-#                 is_added[k] = True
-#         else:
-#             if os.path.basename(a) == "ADD_TO_ALL_OTHER" + ".pyx":
-#                 allDecl_mapping[modname]["addons"].append(a)
-#                 is_added[k] = True
-#         if os.path.basename(a) == "ADD_TO_ALL" + ".pyx":
-#             allDecl_mapping[modname]["addons"].append(a)
-#             is_added[k] = True
-#
-#         # Match addon basename to pxd basename
-#         for pfile in allDecl_mapping[modname]["files"]:
-#             if os.path.basename(a).split(".")[0] == os.path.basename(pfile).split(".")[0]:
-#                 allDecl_mapping[modname]["addons"].append(a)
-#                 is_added[k] = True
-#
-#         if is_added[k]:
-#             continue
-#
-#         # Also match by class name (sometimes one pxd contains multiple classes
-#         # and the addon is named after one of them)
-#         for dclass in allDecl_mapping[modname]["decls"]:
-#             if os.path.basename(a) == dclass.name + ".pyx":
-#                 allDecl_mapping[modname]["addons"].append(a)
-#                 is_added[k] = True
+is_added = [False for k in addons]
+for modname in mnames:
+
+    for k,a in enumerate(addons):
+        # Deal with special code that needs to go into all modules, only the
+        # first or only all other modules...
+        # if modname == mnames[0]:
+        #     if os.path.basename(a) == "ADD_TO_FIRST" + ".pyx":
+        #         allDecl_mapping[modname]["addons"].append(a)
+        #         is_added[k] = True
+        # else:
+        #     if os.path.basename(a) == "ADD_TO_ALL_OTHER" + ".pyx":
+        #         allDecl_mapping[modname]["addons"].append(a)
+        #         is_added[k] = True
+        # if os.path.basename(a) == "ADD_TO_ALL" + ".pyx":
+        #     allDecl_mapping[modname]["addons"].append(a)
+        #     is_added[k] = True
+
+        # Match addon basename to pxd basename
+        for pfile in allDecl_mapping[modname]["files"]:
+            if os.path.basename(a).split(".")[0] == os.path.basename(pfile).split(".")[0]:
+                allDecl_mapping[modname]["addons"].append(a)
+                is_added[k] = True
+
+        if is_added[k]:
+            continue
+
+        # Also match by class name (sometimes one pxd contains multiple classes
+        # and the addon is named after one of them)
+        for dclass in allDecl_mapping[modname]["decls"]:
+            if os.path.basename(a) == dclass.name + ".R":
+                allDecl_mapping[modname]["addons"].append(a)
+                is_added[k] = True
 
 # add any addons that did not get added anywhere else
-# for k, got_added in enumerate(is_added):
-#     if not got_added:
-#         # add to all modules
-#         for m in mnames:
-#             allDecl_mapping[m]["addons"].append( addons[k] )
+for k, got_added in enumerate(is_added):
+    if not got_added:
+        # add to all modules
+        for m in mnames:
+            allDecl_mapping[m]["addons"].append( addons[k] )
 
 
 def doCythonCodeGeneration(modname, allDecl_mapping, instance_map, converters):
     m_filename = "pyopenms/%s.R" % modname
+    # Changing directory all R specific code resides in R
     cimports, manual_code = autowrap.Main.collect_manual_code(allDecl_mapping[modname]["addons"])
     autowrap.Main.register_converters(converters)
     autowrap_include_dirs = autowrap.generate_code(allDecl_mapping[modname]["decls"], instance_map,
@@ -208,7 +211,7 @@ argzip = [ (modname, allDecl_mapping[modname]["inc_dirs"]) for modname in mnames
 # for arg in argzip:
 #     doCythonCompile(arg)
 
-print("created pyopenms.R")
+print("created pyopenms_1.R")
 
 
 # with open("pyopenms/all_modules.py", "w") as fp:

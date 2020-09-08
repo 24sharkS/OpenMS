@@ -8,6 +8,6 @@ QcMLFile$$set("public","map2csv",function(csv_table,separator){
   k <- lapply(csv_table$$keys(),function(k) py_builtin$$bytes(k,'utf-8'))
   v <- lapply(csv_table$$values(),function(v) py_dict(lapply(v$$keys(),function(k) py_builtin$$bytes(k,'utf-8')),lapply(v$$values(),function(v) py_builtin$$bytes(v,'utf-8'))))
   d <- py_dict(k,v)
-  res <- private$$py_obj$$map2csv(d,separator)
+  res <- private$$py_obj$$map2csv(d,r_to_py(separator))
   return(as.character(res))
 })

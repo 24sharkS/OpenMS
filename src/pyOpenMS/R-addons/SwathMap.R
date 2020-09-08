@@ -9,6 +9,6 @@ SwathMap$$set("public","getSpectrumPtr",function() {
 
 SwathMap$$set("public","setSpectrumPtr",function(arg) {
   if(!(is.R6(arg) && class(arg)[1] %in% c("SpectrumAccessOpenMS","SpectrumAccessOpenMSCached","SpectrumAccessOpenMSInMemory","SpectrumAccessQuadMZTransforming") )) { stop("Need to provide suitable ISpectrumAccess-derived child class") }
-  private$$py_obj$$setSpectrumPtr(arg)
+  private$$py_obj$$setSpectrumPtr(r_to_py(arg))
   invisible()
 })

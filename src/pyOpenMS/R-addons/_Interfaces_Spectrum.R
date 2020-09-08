@@ -10,13 +10,13 @@ Spectrum$$set("public","getIntensityArray",function() {
 } )
 
 Spectrum$$set("public","setMZArray",function(data) {
-  if ( !(is_double(data) || is_integer(data)) ) { stop("arg transitions wrong type") }
+  if ( !(is.vector(data) && all(sapply(data, function(x) {is_scalar_integer(x) || is_scalar_double(x)})) ) ) { stop("arg transitions wrong type") }
   private$$py_obj$$setMZArray(as.list(data))
   invisible()
 } )
 
 Spectrum$$set("public","setIntensityArray",function(data) {
-  if ( !(is_double(data) || is_integer(data)) ) { stop("arg transitions wrong type") }
+  if ( !(is.vector(data) && all(sapply(data, function(x) {is_scalar_integer(x) || is_scalar_double(x)})) ) ) { stop("arg transitions wrong type") }
   private$$py_obj$$setIntensityArray(as.list(data))
   invisible()
 } )

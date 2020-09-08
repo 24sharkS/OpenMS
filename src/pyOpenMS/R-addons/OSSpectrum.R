@@ -8,11 +8,11 @@ OSSpectrum$$set("public","getIntensityArray",function() {
 })
 
 OSSpectrum$$set("public","setMZArray",function(data) {
-  if(!(is_double(data))) { stop("arg data wrong type") }
+  if(!(is.vector(data) && all(sapply(data,is_scalar_double)))) { stop("arg data wrong type") }
   return( private$$py_obj$$setMZArray(as.list(data)) )
 })
 
 OSSpectrum$$set("public","setIntensityArray",function(data) {
-  if(!(is_double(data))) { stop("arg data wrong type") }
+  if(!(is.vector(data) && all(sapply(data,is_scalar_double)))) { stop("arg data wrong type") }
   return( private$$py_obj$$setMZArray(as.list(data)) )
 })

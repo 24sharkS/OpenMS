@@ -6,12 +6,12 @@ MetaInfoInterface$$set("public","getMetaValues",function(){
   # v : list(bytes)/list(int)/list(double)/list(list(int))/list(list(double))/list(list(bytes))
   is_nested <- all(sapply(v,function(v1) is_list(v1)))
   if(is_nested){
-    v <- modify_depth(v,2,function(s){
+    v <- map_depth(v,2,function(s){
        if(class(s)[1]=="python.builtin.bytes") as.character(s)
        else { s }
     })
   } else {
-    v <- modify_depth(v,1, function(s){
+    v <- map_depth(v,1, function(s){
        if(class(s)[1]=="python.builtin.bytes") as.character(s)
        else { s }
     })
@@ -30,7 +30,7 @@ MetaInfoInterface$$set("public","setMetaValues",function(mmap){
   v <- mmap$$values()
   k <- mmap$$keys()
   if(is_nested_char) {
-    v <- modify_depth(v,2,function(vi) py_builtin$$bytes(vi,'utf-8'))
+    v <- map_depth(v,2,function(vi) py_builtin$$bytes(vi,'utf-8'))
   }
   private$$py_obj$$setMetaValues(py_dict(k,v))
   invisible()

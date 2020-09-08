@@ -11,6 +11,6 @@ MatrixDouble$$set("public","get_matrix_as_view",function(){
 
 MatrixDouble$$set("public","set_matrix",function(data){
   if(!(is.matrix(data) && all(sapply(seq_along(NROW(data)), function(d) is_double(data[d,]) ))) ) { stop("arg data wrong type") }
-  private$$py_obj$$set_matrix(data)
+  private$$py_obj$$set_matrix(npy$$array(data, order = "c"))
   invisible()
 } )

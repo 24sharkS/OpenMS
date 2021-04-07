@@ -37,6 +37,7 @@ MultiplexResolver
 MzMLSplitter
 NovorAdapter
 NucleicAcidSearchEngine
+OpenMSDatabasesInfo
 OpenMSInfo
 PeakPickerIterative
 PSMFeatureExtractor
@@ -59,9 +60,11 @@ SimpleSearchEngine
 SiriusAdapter
 SpecLibCreator
 SpectraSTSearchAdapter
+StaticModification
 SvmTheoreticalSpectrumGeneratorTrainer
 TICCalculator
 TransformationEvaluation
+TriqlerConverter
 XMLValidator
 )
 

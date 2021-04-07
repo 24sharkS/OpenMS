@@ -56,6 +56,7 @@
 #include <OpenMS/QC/Ms2IdentificationRate.h>
 #include <OpenMS/QC/MzCalibration.h>
 #include <OpenMS/QC/PeptideMass.h>
+#include <OpenMS/QC/PSMExplainedIonCurrent.h>
 #include <OpenMS/QC/RTAlignment.h>
 #include <OpenMS/QC/TIC.h>
 #include <OpenMS/QC/Ms2SpectrumStats.h>
@@ -126,7 +127,7 @@ protected:
     setValidFormats_("in_raw", {"mzML"});
     registerInputFileList_("in_postFDR", "<files>", {}, "FeatureXMLs after FDR filtering", false);
     setValidFormats_("in_postFDR", {"featureXML"});
-    registerOutputFile_("out", "<file>", "", "Output mzTab with QC information", true);
+    registerOutputFile_("out", "<file>", "", "Output mzTab with QC information", false);
     setValidFormats_("out", { "mzTab" });
     registerOutputFile_("out_cm", "<file>", "", "ConsensusXML with QC information (as metavalues)", false);
     setValidFormats_("out_cm", { "consensusXML" });
@@ -141,7 +142,7 @@ protected:
     registerInputFileList_("in_trafo", "<file>", {}, "trafoXMLs from MapAligners", false);
     setValidFormats_("in_trafo", {"trafoXML"});
     registerTOPPSubsection_("MS2_id_rate", "MS2 ID Rate settings");
-    registerFlag_("MS2_id_rate:force_no_fdr", "Forces the metric to run if FDR is missing (accepts all pep_ids as target hits).", false);
+    registerFlag_("MS2_id_rate:assume_all_target", "Forces the metric to run even if target/decoy annotation is missing (accepts all pep_ids as target hits).", false);
     //TODO get ProteinQuantifier output for PRT section
   }
 
@@ -227,12 +228,12 @@ protected:
 
 
     // check flags
-    bool fdr_flag = getFlag_("MS2_id_rate:force_no_fdr");
+    bool all_target_flag = getFlag_("MS2_id_rate:assume_all_target");
     double tolerance_value = getDoubleOption_("FragmentMassError:tolerance");
 
-    auto it = std::find(FragmentMassError::names_of_toleranceUnit, FragmentMassError::names_of_toleranceUnit + (int)FragmentMassError::ToleranceUnit::SIZE_OF_TOLERANCEUNIT, getStringOption_("FragmentMassError:unit"));
-    auto idx = std::distance(FragmentMassError::names_of_toleranceUnit, it);
-    auto tolerance_unit = FragmentMassError::ToleranceUnit(idx);
+    auto it = std::find(QCBase::names_of_toleranceUnit, QCBase::names_of_toleranceUnit + (int) QCBase::ToleranceUnit::SIZE_OF_TOLERANCEUNIT, getStringOption_("FragmentMassError:unit"));
+    auto idx = std::distance(QCBase::names_of_toleranceUnit, it);
+    auto tolerance_unit = QCBase::ToleranceUnit(idx);
 
 
     // Instantiate the QC metrics
@@ -244,6 +245,7 @@ protected:
     MzCalibration qc_mz_calibration;
     RTAlignment qc_rt_alignment;
     PeptideMass qc_pepmass;
+    PSMExplainedIonCurrent qc_psm_corr;
     TIC qc_tic;
     Ms2SpectrumStats qc_ms2stats;
     MzMLFile mzml_file;
@@ -299,7 +301,7 @@ protected:
 
       if (qc_ms2ir.isRunnable(status))
       {
-        qc_ms2ir.compute(*fmap, exp, fdr_flag);
+        qc_ms2ir.compute(*fmap, exp, all_target_flag);
       }
 
       if (qc_mz_calibration.isRunnable(status))
@@ -326,6 +328,11 @@ protected:
       if (qc_pepmass.isRunnable(status))
       {
         qc_pepmass.compute(*fmap);
+      }
+
+      if (qc_psm_corr.isRunnable(status))
+      {
+        qc_psm_corr.compute(*fmap, exp, spec_map, tolerance_unit, tolerance_value);
       }
 
       if (qc_tic.isRunnable(status))
@@ -411,14 +418,19 @@ protected:
       ConsensusXMLFile().store(out_cm, cmap);
     }
 
-    MzTab mztab = MzTab::exportConsensusMapToMzTab(cmap, in_cm, true, true, true, true, "QC export from OpenMS");
-    MzTabMetaData meta = mztab.getMetaData();
-    qc_tic.addMetaDataMetricsToMzTab(meta);
-    qc_ms2ir.addMetaDataMetricsToMzTab(meta);
-    mztab.setMetaData(meta);
+    String out = getStringOption_("out");
+    if (!out.empty())
+    {
+      MzTab mztab = MzTab::exportConsensusMapToMzTab(cmap, in_cm, true, true, true, true, "QC export from OpenMS");
+      MzTabMetaData meta = mztab.getMetaData();
+      qc_tic.addMetaDataMetricsToMzTab(meta);
+      qc_ms2ir.addMetaDataMetricsToMzTab(meta);
+      mztab.setMetaData(meta);
 
-    MzTabFile mztab_out;
-    mztab_out.store(getStringOption_("out"), mztab);
+      MzTabFile mztab_out;
+      mztab_out.store(out, mztab);
+    }
+
     return EXECUTION_OK;
   }
 

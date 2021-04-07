@@ -164,6 +164,14 @@ public:
       UNEXPECTED_RESULT
     };
 
+
+
+    /// No default constructor
+    TOPPBase() = delete;
+
+    /// No default copy constructor.
+    TOPPBase(const TOPPBase&) = delete;
+
     /**
       @brief Constructor
 
@@ -174,7 +182,7 @@ public:
 
       @param citations Add one or more citations if they are associated specifically to this TOPP tool; they will be printed during --help
     */
-    TOPPBase(const String& name, const String& description, bool official = true, const std::vector<Citation>& citations = {});
+    TOPPBase(const String& name, const String& description, bool official = true, const std::vector<Citation>& citations = {}, bool toolhandler_test = true);
 
     /// Destructor
     virtual ~TOPPBase();
@@ -191,6 +199,15 @@ public:
     */
     static void setMaxNumberOfThreads(int num_threads);
 
+    /**
+      @brief Returns the prefix used to identify the tool
+    
+      This prefix is later found in the INI file for a TOPP tool.
+      f.e.: "FileConverter:1:"
+
+    */
+    String getToolPrefix() const;
+
 private:
     /// Tool name.  This is assigned once and for all in the constructor.
     String const tool_name_;
@@ -203,12 +220,6 @@ private:
 
     /// Location in the ini file where to look for parameters.
     String const ini_location_;
-
-    /// No default constructor.  It is "declared away".
-    TOPPBase();
-
-    /// No default copy constructor.  It is "declared away".
-    TOPPBase(const TOPPBase&);
 
     /// All parameters relevant to this invocation of the program.
     Param param_;
@@ -362,6 +373,7 @@ private:
     */
     String getSubsection_(const String& name) const;
 
+    /// Returns a link to the documentation of the tool (accessible on our servers and only after inclusion in the nightly branch or a release).
     String getDocumentationURL() const;
 
     /// Returns the default parameters
@@ -383,7 +395,10 @@ protected:
 
     /// Papers, specific for this tool (will be shown in '--help')
     std::vector<Citation> citations_;
-    
+
+    /// Enable the ToolHandler tests
+    bool toolhandler_test_;
+
     /**
       @brief Returns the location of the ini file where parameters are taken
       from.  E.g. if the command line was <code>TOPPTool -instance 17</code>, then
